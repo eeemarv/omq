@@ -1,0 +1,18 @@
+
+language: English
+
+business:
+  title: Plan A, the Community Way
+  heading: Plan A, the Community Way
+  explain: Donate Community Way Euros
+
+edit:
+  title: Plan A, the Community Way
+  heading: Plan A, the Community Way
+  explain: Upload or edit your project.
+
+ticket:
+  title: Vote for A
+  text: Visit the URL above or use the QR code on the left and decide how the budget of Community Way euros is distributed over the projects for A.
+  foot: The Community Way
+

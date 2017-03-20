@@ -1,0 +1,41 @@
+{
+	"name": "eeemarv/cwvote",
+	"license": "MIT",
+	"type": "project",
+	"description": "voting for community way currency.",
+
+    "require": {
+		"php": "^7",
+		"aws/aws-sdk-php": "^3",
+		"swiftmailer/swiftmailer": "~5.4",
+		"monolog/monolog": "^1",
+		"bramus/monolog-colored-line-formatter": "2.0.*",
+		"ext-imagick": "*",
+		"ext-exif": "*",
+		"ext-gd": "*",
+		"ext-mbstring": "*",
+        "imagine/imagine": "^0.6",
+        "doctrine/dbal": "~2.5",
+        "predis/predis": "~1.1",
+        "twig/twig": "^2",
+		"silex/silex": "~2.0",
+		"symfony/twig-bridge": "^3.2",
+		"symfony/security": "^3.2",
+		"symfony/finder": "^3.2",
+		"symfony/asset": "^3.2",
+		"symfony/translation": "^3.2",
+		"symfony/yaml": "^3.2",
+		"symfony/config": "^3.2",
+		"mpdf/mpdf": "^6.1"
+	},
+
+    "minimum-stability": "stable",
+
+	"autoload": {
+		"psr-4": {
+			"controller\\": "controller/",
+			"service\\": "service/",
+			"util\\": "util/"
+        }
+    }
+}

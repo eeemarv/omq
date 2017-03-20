@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Plan A, the Community Way</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link type="text/css" rel="stylesheet" href="{{ asset('/base.css') }}" media="screen">
+</head>
+<body>
+
+<div class="modal fade" id="donate" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Donate to ...</h4>
+      </div>
+      <div class="modal-body">
+        <p></p>
+		<div class="radio">
+		  <label>
+			<input type="radio" name="amount" id="amount_5" value="5">
+			5 cw-euro
+		  </label>
+		</div>
+		<div class="radio">
+		  <label>
+			<input type="radio" name="amount" id="amount_10" value="10">
+			10 cw-euro
+		  </label>
+		</div>
+		<div class="radio">
+		  <label>
+			<input type="radio" name="amount" id="amount_20" value="20" selected>
+			20 cw-euro
+		  </label>
+		</div>
+		<div class="radio">
+		  <label>
+			<input type="radio" name="amount" id="amount_50" value="50">
+			50 cw-euro
+		  </label>
+		</div>
+		<div class="radio">
+		  <label>
+			<input type="radio" name="amount" id="amount_100" value="100">
+			100 cw-euro
+		  </label>
+		</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="jumbotron text-center">
+  <h1>Plan A, the Community Way</h1>
+<p>100 Mayors presented their projects to make Antwerp a better place.
+Now it is up to you to vote for your favourite projects by directing
+Community Way money to them in order to to realise them.</p>
+
+<!-- <p>Click here to get some info.</p> -->
+</div>
+<div class="container-fluid">
+
+<div class="row bg-info text-center"><div class="col-sm-12">
+<h2>You still have <span class="label label-info">100</span> cw-euro to donate to projects.</h2>
+<p>Please select below the projects you wish to support.</p>
+</div></div>
+
+<div class="row bg-info">
+<div class="col-sm-4 margin-bottom">
+<button type="button" class="btn btn-primary btn-block" role="button" data-toggle="modal" data-target="#donate">
+To the current poorest project</a>
+</div>
+<div class="col-sm-4 margin-bottom">
+<button type="button" class="btn btn-primary btn-block" role="button" data-toggle="modal" data-target="#donate">
+Equally to all projects</a>
+</div>
+<div class="col-sm-4 margin-bottom">
+<button type="button" class="btn btn-primary btn-block" role="button" data-toggle="modal" data-target="#donate">
+Choose a project randomly</a>
+</div>
+</div>
+<div class="row bg-info text-center">
+<p>When you voted all your cw-euro away, you will get yourself a cw-account with 10 cw-euro on it.</p>
+</div>
+
+<div class="row text-center"><h3>The projects</h3></div>
+
+<p></p>
+
+<div class="row" id="projects" data-projects="{{ projects }}">
+
+  <div class="col-sm-4 col-md-3">
+    <div class="thumbnail">
+      <img src="" alt="...">
+      <div class="caption">
+        <h3>My project title</h3>
+        <p>my project text</p>
+        <p><a href="#" class="btn btn-primary" role="button">Donate</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-4 col-md-3">
+    <div class="thumbnail">
+      <img src="" alt="...">
+      <div class="caption">
+        <h3>My project title</h3>
+        <p>my project text</p>
+        <p><a href="#" class="btn btn-primary" role="button">Donate</a></p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div class="footer text-center bg-info">
+<p>&nbsp;</p>
+<p>Copyright 2017 Omdev.be</p>
+<p>&nbsp;</p>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+</html>

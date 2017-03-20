@@ -1,0 +1,50 @@
+<body>
+
+{% for p in pages %}
+
+<div class="cont">
+
+{% for t in p.tickets %}
+
+{% if loop.index is odd %}
+<div class="row">
+{% endif %}
+
+<div class="col">
+
+<div class="heading{% if loop.first %} lft{% endif %}">
+	<h2>{{ t }}</h2>
+</div>
+
+<div class="text">
+<h2>{{ 'ticket.title'|trans() }}</h2>
+<p>{{ 'ticket.text'|trans() }}</p>
+</div>
+
+<div class="qrcode">
+	<barcode code="{{ t }}" type="QR" class="barcode" size="1.7" error="{{ err_corr }}" />
+</div>
+
+<div class="foot{% if loop.index == loop.length - 1 %} lft{% endif %}">
+<h3>{{ 'ticket.foot'|trans() }}</h3>
+</div>
+
+</div>
+
+{% if loop.index is even %}
+</div>
+
+<div class="m-row">
+<div class="m-left"></div>
+<div class="m-right"></div>
+</div>
+
+{% endif %}
+
+{% endfor %}
+
+</div>
+
+<pagebreak />
+{% endfor %}
+</body>
