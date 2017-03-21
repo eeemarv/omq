@@ -1,6 +1,15 @@
 
 language: English
 
+unit: CW
+
+navbar:
+  brand: The Community Way local currency
+  business: For Businesses
+  what: What is CW?
+  vote: Vote for A
+  home: Home
+
 business:
   title: Plan A, the Community Way
   heading: Plan A, the Community Way
@@ -13,6 +22,35 @@ edit:
 
 ticket:
   title: Vote for A
-  text: Visit the URL above or use the QR code on the left and decide how the budget of Community Way euros is distributed over the projects for A.
+  text: >
+    Visit the URL above or use the QR code on the left and decide
+    how the budget of Community Way euros is distributed over the projects for A.
   foot: The Community Way
+
+footer:
+  copyright: Copyright 2017 Omdev.be
+  cookies: This site uses first party cookies only. No third party cookies here.
+
+
+vote:
+  heading:
+    title: Vote for A
+    explain: >
+      The mayors presented their projects to make Antwerp a better place.
+      If you decide over 100 CW that is to be donated to projects. To which projects should it go?
+  button:
+    poorest: My CW to the current poorest project
+    equally: My CW Equally to all projects.
+  explain_gift: >
+    When you voted all your cw-euro away, you will get yourself a
+    cw-account with 10 cw-euro on it.
+  select_projects: Please select below the projects you prefer to be supported.
+  amount_available: Amount still available
+
+projects:
+  title: The Projects
+
+index:
+  title: Plan A, the Community Way
+
 

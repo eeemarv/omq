@@ -3,11 +3,30 @@ body{
  Font-Family: Sans-Serif;
 }
 
+.batch-n{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+
 div.cont{
+
+ /*       text-align: center;
+        overflow: hidden;
+        page-break-inside: avoid;*/
+/*
+position: absolute;
+top: 0;
+bottom: 0;
+left: 0;*/
+
   width: 100%;
   height: 100%;
-  border: 1px solid #000;
-  background-color: #eee;
+/*  border: 1px solid #000; */
+/*  background-color: #cfe;*/
+	z-index: 10;
+  padding: 1mm;
 
 }
 
@@ -76,6 +95,10 @@ div.m-right{
   width: 1cm;
   float: right;
   border-bottom: 1px solid #000;
+}
+
+qrcode{
+  background-color: white;
 }
 
 

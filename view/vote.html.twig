@@ -1,14 +1,6 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>{{ 'index.title'|trans }}</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link type="text/css" rel="stylesheet" href="{{ asset('/base.css') }}" media="screen">
-</head>
-<body>
+{% extends 'base.html.twig' %}
+
+{% block modal %}
 
 <div class="modal fade" id="donate" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
@@ -58,32 +50,19 @@
   </div>
 </div>
 
-<!-- -->
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">{{ 'navbar.brand'|trans }}</a>
-    </div>
+{% endblock modal %}
 
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">{{ 'navbar.what'|trans }}</a></li>
-        <li><a href="#">{{ 'navbar.business'|trans }}</a></li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
+{% block heading %}
 
-<!-- -->
 <div class="jumbotron text-center">
 
-	<h1>{{ 'jumbo.title'|trans }}</h1>
-{#	<h3>{{ 'jumbo.subtitle'|trans }}</h3> #}
-	<p>{{ 'jumbo.explain'|trans }}</p>
-
-<!-- <p>Click here to get some info.</p> -->
+	<h1>{{ 'vote.heading.title'|trans }}</h1>
+	<p>{{ 'vote.heading.explain'|trans }}</p>
 </div>
-<div class="container-fluid">
+
+{% endblock heading %}
+
+{% block action %}
 
 <div class="vote">
 <div class="row bg-info text-center"><div class="col-sm-12">
@@ -102,12 +81,12 @@
 {{ 'vote.button.equally'|trans }}</a>
 </div>
 </div>
-{#
-<div class="row bg-info text-center">
-<p>{{ 'vote.explain_gift'|trans }}</p>
+
 </div>
-#}
-</div>
+
+{% endblock action %}
+
+{% block content %}
 
 <div class="row text-center"><h3>{{ 'projects.title'|trans }}</h3></div>
 
@@ -127,15 +106,6 @@
 </div>
 
 </div>
-</div>
 
-<div class="footer text-center bg-info">
-<p>&nbsp;</p>
-<p>{{ 'footer.cookies'|trans }}</p>
-<p>{{ 'footer.copyright'|trans }}</p>
-<p>&nbsp;</p>
-</div>
-<script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-</body>
-</html>
+{% endblock content %}
+

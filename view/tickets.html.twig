@@ -2,6 +2,13 @@
 
 {% for p in pages %}
 
+<div style="position: absolute; left:0; right: 0; top: 0; bottom: 0; ">
+<img src="black.png" style="width: 210mm; height: 297mm; margin: 0; opacity: 0.05;" />
+</div>
+<div style="position: absolute; left:0; right: 0; top: 0; bottom: 0; ">
+<img src="magenta.png" style="width: 210mm; height: 297mm; margin: 0; opacity: 0.08;" />
+</div>
+
 <div class="cont">
 
 {% for t in p.tickets %}
@@ -22,7 +29,8 @@
 </div>
 
 <div class="qrcode">
-	<barcode code="{{ t }}" type="QR" class="barcode" size="1.7" error="{{ err_corr }}" />
+	<barcode code="{{ t }}" type="QR" class="barcode" size="1.6" error="{{ err_corr }}" />
+	<small class="batch-n">02</small>
 </div>
 
 <div class="foot{% if loop.index == loop.length - 1 %} lft{% endif %}">
@@ -46,5 +54,6 @@
 </div>
 
 <pagebreak />
+
 {% endfor %}
 </body>

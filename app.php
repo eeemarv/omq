@@ -84,6 +84,16 @@ $app->extend('translator', function($translator, $app) {
 	return $translator;
 });
 
+
+$app->register(new Silex\Provider\SessionServiceProvider(), [
+	'session.storage.handler'	=> new service\redis_session($app['redis']),
+	'session.storage.options'	=> [
+		'name'						=> 'cwvote',
+//		'cookie_domain'				=> '.' . getenv('OVERALL_DOMAIN'),
+		'cookie_lifetime'			=> 172800,
+	],
+]);
+
 $app['xdb'] = function($app){
 	return new service\xdb($app['db'], $app['redis'], $app['monolog']);
 };

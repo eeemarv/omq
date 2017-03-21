@@ -5,7 +5,74 @@ use Silex\Application;
 
 $app = require_once __DIR__ . '/../app.php';
 
+$app->register(new Silex\Provider\SecurityServiceProvider(), [
+	'security.firewalls' => [
+		'admin' 	=> [
+			'pattern' 	=> '^/admin',
+			'http' 		=> true,
+			'users' 	=> [
+				'admin' 	=> ['ROLE_ADMIN', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'],
+			],
+		],
+	],
 
+	'security.role_hierarchy' => [
+		'ROLE_ADMIN' => ['ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'],
+	],
+
+]);
+
+//
+
+$app->get('/vote', function (Request $request) use ($app)
+{
+	$projects = $app['redis']->get('projects');
+
+	if (!$projects)
+	{
+
+		$projects = [];
+		// get from xdb.
+	}
+
+    return $app['twig']->render('vote.html.twig', [
+		'projects'	=> $projects,
+		's3_img'	=> getenv('S3_IMG'),
+	]);
+});
+
+//
+
+$app->get('/business', function (Request $request, Application $app)
+{
+	$projects = $app['redis']->get('projects_enc');
+
+	if (!$projects)
+	{
+		// get from xdb.
+	}
+
+	$projects = htmlspecialchars('{"druppie": "hoepla"}');
+
+    return $app['twig']->render('index.html.twig', [
+		'projects'	=> $projects,
+	]);
+
+});
+
+//
+
+$app->get('/{token}', function (Request $request, Application $app, $token)
+{
+	$ticket = $app['xdb']->get('ticket_' . $token);
+
+	$app['session']->set('ticket', $ticket);
+
+	return $app->redirect('/');
+
+})->assert('token', '/^[a-z0-9\-]{8}$/');
+
+//
 
 $app->get('/edit', function (Request $request, Application $app)
 {
@@ -24,7 +91,19 @@ $app->get('/edit', function (Request $request, Application $app)
 
 });
 
-$app->post('/admin/img', function (Request $request, Application $app){
+$app->get('/{token}', function (Request $request, Application $app, $token)
+{
+	$ticket = $app['xdb']->get('ticket_' . $token);
+
+	$app['session']->set('ticket', $ticket);
+
+	return $app->redirect('/');
+
+})->assert('token', '/^[a-z0-9\-]{12}$/');
+
+
+
+$app->post('/img', function (Request $request, Application $app){
 
 /*
 	$image = ($_FILES['image']) ?: null;
@@ -111,26 +190,6 @@ $app->post('/admin/img', function (Request $request, Application $app){
 	*/
 });
 
-
-$app->get('/{token}', function (Request $request, Application $app)
-{
-	$projects = $app['redis']->get('projects');
-
-	if (!$projects)
-	{
-
-		$projects = [];
-		// get from xdb.
-	}
-
-    return $app['twig']->render('index.html.twig', [
-		'projects'	=> $projects,
-		's3_img'	=> getenv('S3_IMG'),
-	]);
-
-})->assert('token', '/^[a-z0-9\-]{8}$/');
-
-
 $app->get('/', function (Request $request) use ($app)
 {
 	$projects = $app['redis']->get('projects');
@@ -146,7 +205,6 @@ $app->get('/', function (Request $request) use ($app)
 		'projects'	=> $projects,
 		's3_img'	=> getenv('S3_IMG'),
 	]);
-
 });
 
 $app->run();

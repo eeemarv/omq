@@ -37,7 +37,7 @@ $html = $app['twig']->render('tickets.html.twig', [
 	'err_corr'	=> $err_corr,
 ]);
 
-$mpdf = new mPDF('', 'A4', 0, 0, 0, 0, 0, 0, 0, 0);
+$mpdf = new mPDF('', 'A4', 0, '', 0, 0, 0, 0, 0, 'L');
 
 $css = file_get_contents('tickets.css');
 

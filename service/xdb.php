@@ -11,12 +11,12 @@ use Monolog\Logger;
    Column    |            Type             |              Modifiers
 -------------+-----------------------------+--------------------------------------
  ts          | timestamp without time zone | default timezone('utc'::text, now())
- agg_id      | character varying(255)      | not null
- agg_version | integer                     | not null
+ id          | character varying(255)      | not null
+ version     | integer                     | not null
  data        | jsonb                       |
  ip          | character varying(255)      |
 Indexes:
-    "events_pkey" PRIMARY KEY, btree (agg_id, agg_version)
+    "events_pkey" PRIMARY KEY, btree (id, version)
 */
 
 class xdb
@@ -56,13 +56,14 @@ class xdb
 
 	public function set(string $id, array $data = [])
 	{
-		$version = $this->db->fetchColumn('select max(agg_version)
-			from xdb.aggs
-			where agg_id = ?', [$agg_id]);
+		$version = $this->db->fetchColumn('select max(version)
+			from xdb.events
+			where id = ?', [$id]);
 
 		$version = $version ? $version + 1 : 1;
 
 		$data['version'] = $version;
+		$data['id'] = $id;
 
 		$insert = [
 			'id'			=> $id,
@@ -90,7 +91,7 @@ class xdb
 	 *
 	 */
 
-	public function get(string $id, integer $version = 0)
+	public function get(string $id, int $version = 0)
 	{
 
 		if ($version === 0)
@@ -100,9 +101,9 @@ class xdb
 			if (!$data)
 			{
 				$data = $this->db->fetchColumn('select e1.data from xdb.events e1
-					where e1.agg_id = ? and e1.agg_version =
-						(select max(e2.agg_version) from xdb.events e2
-							where e1.agg_id = e2.agg_id', [$id]);
+					where e1.id = ? and e1.version =
+						(select max(e2.version) from xdb.events e2
+							where e1.id = e2.id', [$id]);
 
 				if ($data)
 				{
@@ -126,7 +127,7 @@ class xdb
 			if (!$data)
 			{
 				$data = $this->db->fetchColumn('select e1.data from xdb.events e1
-					where e1.agg_id = ? and e1.agg_version = ?', [$id, $version]);
+					where e1.id = ? and e1.version = ?', [$id, $version]);
 
 				if ($data)
 				{
