@@ -74,7 +74,7 @@ while (true)
 	$message = \Swift_Message::newInstance()
 		->setSubject('Plan A, Community Way, verify your email address')
 		->setBody($text)
-		->addPart($html, 'text/html');
+		->addPart($html, 'text/html')
 		->setTo($to)
 		->setFrom($from_noreply_address);
 
