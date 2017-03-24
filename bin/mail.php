@@ -20,7 +20,7 @@ $mailer->registerPlugin(new \Swift_Plugins_AntiFloodPlugin(100, 30));
 $mailer->getTransport()->stop();
 
 $app['xdb']->set('boot', []);
-$boot = $app['xdb']->get('boot')['version'];
+$boot = json_decode($app['xdb']->get('boot'), true)['version'];
 
 echo 'mail service started .. ' . $boot . "\n";
 
@@ -34,14 +34,14 @@ while (true)
 {
 	sleep(1);
 
-	if ($loop_count % 3600 === 0)
+	if ($loop_count % 1800 === 0)
 	{
 		error_log('..mail.. ' . $boot . ' .. ' . $loop_count);
 	}
 
 	$loop_count++;
 
-	$mail = $app['redis']->rpop('email_queue');
+	$mail = $app['redis']->rpop('cwv_email_queue');
 
 	if (!$mail)
 	{
@@ -65,14 +65,14 @@ while (true)
 		continue;
 	}
 
-	$template_html = $this->twig->loadTemplate('mail_' . $template . '.html.twig');
-	$template_text = $this->twig->loadTemplate('mail_' . $template . '.text.twig');
+	$template_html = $this->twig->loadTemplate('mail/' . $template . '.html.twig');
+	$template_text = $this->twig->loadTemplate('mail/' . $template . '.text.twig');
 
 	$text = $template_text->render($mail_ary);
 	$html = $template_html->render($mail_ary);
 
 	$message = \Swift_Message::newInstance()
-		->setSubject('Plan A, Community Way, verify your email address')
+		->setSubject($app->trans('mail.' . $template . '.subject'))
 		->setBody($text)
 		->addPart($html, 'text/html')
 		->setTo($to)

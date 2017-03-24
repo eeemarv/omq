@@ -4,7 +4,7 @@ language: English
 unit: CW
 
 navbar:
-  brand: The Community Way local currency
+  brand: The Community Way
   business: For Businesses
   what: What is CW?
   vote: Vote for A
@@ -17,8 +17,16 @@ business:
 
 edit:
   title: Plan A, the Community Way
-  heading: Plan A, the Community Way
-  explain: Upload or edit your project.
+  heading: Upload or edit your project.
+  email_explain: Send an login-token to your mailbox to upload or edit your project.
+  email: Email
+  email_address: Email address
+  send_token: Send token
+
+notice:
+  no_valid_email: The email is not valid
+  no_access_email: You have no access with this email address
+  token_send_email: An inlog-token is send to your inbox.
 
 ticket:
   title: Vote for A
@@ -49,8 +57,28 @@ vote:
 
 projects:
   title: The Projects
+  no_items: There are currently no projects.
 
 index:
   title: Plan A, the Community Way
+
+mail:
+  verify:
+    a: >
+      Hey, we want to verify that you indeed registered at Plan A, the Community Way.
+      Verifying this address will have your account created at omdev.be.
+      If you wish to continue, please follow the link below:
+    b: >
+      If you didn't register for Plan A, Community Way or didn't request verification,
+      you can ignore this email.
+    subject: Verify your email at Plan A
+  login_token:
+    a: >
+      With the token below you get access to edit your project. It will stay valid for 4 hours.
+    b:
+    subject: Your login token
+
+
+
 
 

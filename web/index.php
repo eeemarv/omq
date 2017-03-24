@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Silex\Application;
 
 $app = require_once __DIR__ . '/../app.php';
@@ -26,21 +27,23 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), [
 
 $app->get('/vote', function (Request $request) use ($app)
 {
-	$projects = $app['redis']->get('projects');
-
-	if (!$projects)
-	{
-
-		$projects = [];
-		// get from xdb.
-	}
-
-    return $app['twig']->render('vote.html.twig', [
-		'projects'	=> $projects,
-		's3_img'	=> getenv('S3_IMG'),
-	]);
+    return $app['twig']->render('vote.html.twig', []);
 });
 
+//
+
+/*
+$app->get('/projects', function (Request $request) use ($app)
+{
+	$projects = $app['xdb']->get('projects');
+
+	$response = new Response();
+	$response->setContent($projects);
+	$response->headers->set('Content-Type', 'application/json');
+
+	return $response;
+}
+*/
 //
 
 $app->get('/business', function (Request $request, Application $app)
@@ -62,148 +65,53 @@ $app->get('/business', function (Request $request, Application $app)
 
 //
 
-$app->get('/{token}', function (Request $request, Application $app, $token)
-{
-	$ticket = $app['xdb']->get('ticket_' . $token);
-
-	$app['session']->set('ticket', $ticket);
-
-	return $app->redirect('/');
-
-})->assert('token', '/^[a-z0-9\-]{8}$/');
+$app->get('/{token}', 'controller\\vote::token')->assert('token', '[a-z0-9-]{8}');
 
 //
 
 $app->get('/edit', function (Request $request, Application $app)
 {
-	$projects = $app['redis']->get('projects_enc');
+	$edit_project = $app['session']->get('edit_project');
 
-	if (!$projects)
-	{
-		// get from xdb.
-	}
-
-	$projects = htmlspecialchars('{"druppie": "hoepla"}');
-
-    return $app['twig']->render('index.html.twig', [
-		'projects'	=> $projects,
-	]);
-
+    return $app['twig']->render('edit.html.twig', ['edit_project' => $edit_project]);
 });
+
+//
+
+$app->post('/login-token', 'controller\\edit::login_token');
+
+//
 
 $app->get('/{token}', function (Request $request, Application $app, $token)
 {
-	$ticket = $app['xdb']->get('ticket_' . $token);
+	$edit_login = $app['xdb']->get('edit_login_' . $token);
 
-	$app['session']->set('ticket', $ticket);
+	$app['session']->set('edit_login', $edit_login);
 
-	return $app->redirect('/');
+	return $app->redirect('/edit');
 
-})->assert('token', '/^[a-z0-9\-]{12}$/');
+})->assert('token', '[a-z0-9-]{12}');
 
 
 
-$app->post('/img', function (Request $request, Application $app){
+$app->post('/img', 'controller\\edit::img');
 
-/*
-	$image = ($_FILES['image']) ?: null;
+$app->get('/admin', function (Request $request) use ($app)
+{
 
-	if (!$image)
-	{
-		echo json_encode(['error' => 'The image file is missing.']);
-		exit;
-	}
+	$editors = $app['xdb']->get('project_editors');
 
-	$size = $image['size'];
-	$tmp_name = $image['tmp_name'];
-	$type = $image['type'];
 
-	if ($size > (200 * 1024))
-	{
-		echo json_encode(['error' => 'The file is too big.']);
-		exit;
-	}
 
-	if ($type != 'image/jpeg')
-	{
-		echo json_encode(['error' => 'No valid filetype.']);
-		exit;
-	}
-
-	$exif = exif_read_data($tmp_name);
-
-	$orientation = $exif['COMPUTED']['Orientation'] ?? false;
-
-	$tmpfile = tempnam(sys_get_temp_dir(), 'img');
-
-	$imagine = new Imagine\Imagick\Imagine();
-
-	$image = $imagine->open($tmp_name);
-
-	switch ($orientation)
-	{
-		case 3:
-		case 4:
-			$image->rotate(180);
-			break;
-		case 5:
-		case 6:
-			$image->rotate(-90);
-			break;
-		case 7:
-		case 8:
-			$image->rotate(90);
-			break;
-		default:
-			break;
-	}
-
-	$image->thumbnail(new Imagine\Image\Box(200, 200), Imagine\Image\ImageInterface::THUMBNAIL_INSET);
-	$image->save($tmpfile);
-
-	//
-
-	$filename = $id . '_';
-	$filename .= substr(sha1($filename . microtime()), 0, 16);
-	$filename .= '.' . $ext;
-
-	$err = $app['eland.s3']->img_upload($filename, $tmpfile);
-
-	if ($err)
-	{
-		$app['monolog']->error('pict: ' .  $err . ' -- ' . $filename);
-
-		$response = ['error' => 'Uploading img failed.'];
-	}
-	else
-	{
-		$app['db']->update('users', [
-			'"PictureFile"'	=> $filename
-		],['id' => $id]);
-
-		$app['monolog']->info('User image ' . $filename . ' uploaded. User: ' . $id);
-
-		readuser($id, true);
-
-		$response = ['success' => 1, 'filename' => $filename];
-	}
-	*/
+    return $app['twig']->render('admin.html.twig', []);
 });
 
 $app->get('/', function (Request $request) use ($app)
 {
-	$projects = $app['redis']->get('projects');
 
-	if (!$projects)
-	{
 
-		$projects = [];
-		// get from xdb.
-	}
+    return $app['twig']->render('base.html.twig', [
 
-    return $app['twig']->render('index.html.twig', [
-		'projects'	=> $projects,
-		's3_img'	=> getenv('S3_IMG'),
 	]);
 });
 

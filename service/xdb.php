@@ -66,7 +66,7 @@ class xdb
 	 *
 	 */
 
-	public function set(string $id, array $data = [])
+	public function set(string $id, array $data)
 	{
 		$version = $this->db->fetchColumn('select max(version)
 			from xdb.events
@@ -77,10 +77,12 @@ class xdb
 		$data['version'] = $version;
 		$data['id'] = $id;
 
+		$json = json_encode($data);
+
 		$insert = [
 			'id'			=> $id,
 			'version'		=> $version,
-			'data'			=> json_encode($data),
+			'data'			=> $json,
 			'ip'			=> $this->ip,
 		];
 
@@ -88,8 +90,12 @@ class xdb
 		{
 			$this->db->insert('xdb.events', $insert);
 
-			$this->redis->hmset('cwv_xdb_' . $id, $data);
-			$this->redis->hmset('cwv_xdb_' . $version . '_' . $id, $data);
+			$this->redis->set('cwv_xdb_' . $id, $json);
+
+			$key = 'cwv_xdb_' . $version . '_' . $id;
+
+			$this->redis->set($key, $json);
+			$this->redis->expire($key, 86400);
 		}
 		catch(Exception $e)
 		{
@@ -108,55 +114,53 @@ class xdb
 
 		if ($version === 0)
 		{
-			$data = $this->redis->hmget('cwv_xdb_' . $id);
+			$key = 'cwv_xdb_' . $id;
 
-			if (!$data)
+			$json = $this->redis->get($key);
+
+			if ($json)
 			{
-				$data = $this->db->fetchColumn('select e1.data from xdb.events e1
-					where e1.id = ? and e1.version =
-						(select max(e2.version) from xdb.events e2
-							where e1.id = e2.id', [$id]);
-
-				if ($data)
-				{
-					$data = json_decode($data, true);
-
-					$this->redis->hmset('cwv_xdb_' . $id, $data);
-
-					return $data;
-				}
-				else
-				{
-					return [];
-				}
+				return $json;
 			}
 
+			$json = $this->db->fetchColumn('select e1.data from xdb.events e1
+				where e1.id = ? and e1.version =
+					(select max(e2.version) from xdb.events e2
+						where e1.id = e2.id)', [$id]);
+
+			if ($json)
+			{
+				$this->redis->set($key, $json);
+
+				return $json;
+			}
+			else
+			{
+				return '{}';
+			}
 		}
-		else
+
+		$key = 'cwv_xdb_' . $version . '_' . $id;
+
+		$json = $this->redis->get($key);
+
+		if ($json)
 		{
-			$data = $this->redis->hmget('cwv_xdb_' . $version . '_' . $id);
-
-			if (!$data)
-			{
-				$data = $this->db->fetchColumn('select e1.data from xdb.events e1
-					where e1.id = ? and e1.version = ?', [$id, $version]);
-
-				if ($data)
-				{
-					$data = json_decode($data, true);
-
-					$this->redis->hmset('cwv_xdb_' . $version . '_' . $id, $data);
-
-					return $data;
-				}
-				else
-				{
-					return [];
-				}
-			}
+			return $json;
 		}
 
-		return $data;
+		$json = $this->db->fetchColumn('select e1.data from xdb.events e1
+			where e1.id = ? and e1.version = ?', [$id, $version]);
+
+		if ($json)
+		{
+			$this->redis->set($key, $json);
+			$this->redis->expire($key, 86400);
+
+			return $json;
+		}
+
+		return '{}';
 	}
 }
 

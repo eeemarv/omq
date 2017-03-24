@@ -45,6 +45,12 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
 	],
 ]);
 
+$app->extend('twig', function($twig, $app) {
+    $twig->addGlobal('s3_img', getenv('S3_IMG'));
+    $twig->addGlobal('projects', $app['xdb']->get('projects'));
+    return $twig;
+});
+
 $app->register(new Silex\Provider\MonologServiceProvider(), []);
 
 $app->extend('monolog', function($monolog, $app) {
@@ -61,10 +67,7 @@ $app->extend('monolog', function($monolog, $app) {
 $app->register(new Silex\Provider\AssetServiceProvider(), [
 	'assets.version' => '1',
 	'assets.version_format' => '%s?v=%s',
-	'assets.named_packages' => [
-		'css' 		=> ['version' 	=> 'css2', 'base_path' => '/'],
-		'images' 	=> ['base_urls' => ['http://' . getenv('S3_IMG')]],
-	],
+	'assets.base_path'	=> '/assets',
 ]);
 
 $app->register(new Silex\Provider\LocaleServiceProvider());

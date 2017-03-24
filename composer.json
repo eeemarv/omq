@@ -26,7 +26,8 @@
 		"symfony/translation": "^3.2",
 		"symfony/yaml": "^3.2",
 		"symfony/config": "^3.2",
-		"mpdf/mpdf": "^6.1"
+		"mpdf/mpdf": "^6.1",
+		"symfony/validator": "^3.2"
 	},
 
     "minimum-stability": "stable",
