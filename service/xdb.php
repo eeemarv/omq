@@ -17,6 +17,18 @@ use Monolog\Logger;
  ip          | character varying(255)      |
 Indexes:
     "events_pkey" PRIMARY KEY, btree (id, version)
+
+SQL:
+
+create table if not exists xdb.events (
+	ts timestamp without time zone default timezone('utc'::text, now()),
+	id varchar(255),
+	version int,
+	data jsonb,
+	ip varchar(60)
+);
+
+alter table xdb.events add primary key (id, version);
 */
 
 class xdb
@@ -76,8 +88,8 @@ class xdb
 		{
 			$this->db->insert('xdb.events', $insert);
 
-			$this->redis->hmset('xdb_' . $id, $data);
-			$this->redis->hmset('xdb_' . $version . '_' . $id, $data);
+			$this->redis->hmset('cwv_xdb_' . $id, $data);
+			$this->redis->hmset('cwv_xdb_' . $version . '_' . $id, $data);
 		}
 		catch(Exception $e)
 		{
@@ -96,7 +108,7 @@ class xdb
 
 		if ($version === 0)
 		{
-			$data = $this->redis->hmget('xdb_' . $id);
+			$data = $this->redis->hmget('cwv_xdb_' . $id);
 
 			if (!$data)
 			{
@@ -109,7 +121,7 @@ class xdb
 				{
 					$data = json_decode($data, true);
 
-					$this->redis->hmset('xdb_' . $id, $data);
+					$this->redis->hmset('cwv_xdb_' . $id, $data);
 
 					return $data;
 				}
@@ -122,7 +134,7 @@ class xdb
 		}
 		else
 		{
-			$data = $this->redis->hmget('xdb_' . $version . '_' . $id);
+			$data = $this->redis->hmget('cwv_xdb_' . $version . '_' . $id);
 
 			if (!$data)
 			{
@@ -133,7 +145,7 @@ class xdb
 				{
 					$data = json_decode($data, true);
 
-					$this->redis->hmset('xdb_' . $version . '_' . $id, $data);
+					$this->redis->hmset('cwv_xdb_' . $version . '_' . $id, $data);
 
 					return $data;
 				}
