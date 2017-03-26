@@ -10,6 +10,9 @@ $err_corr = $_GET['err_corr'] ?? 'Q';
 
 $app->boot();
 
+$app['token']->set_length($hash_length);
+$app['token']->set_hyphen_chance($hyphen_chance);
+
 $app['translator']->setLocale('nl');
 
 ini_set('max_execution_time', 600);
@@ -19,6 +22,8 @@ $time_pre = microtime(true);
 $url = 'https://a.omdev.be/';
 
 $pages = [];
+
+
 
 for ($p = 0; $p < $page_count; $p++)
 {

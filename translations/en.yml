@@ -1,7 +1,7 @@
 
 language: English
 
-unit: CW
+unit: cw€
 
 navbar:
   brand: The Community Way
@@ -39,13 +39,21 @@ footer:
   copyright: Copyright 2017 Omdev.be
   cookies: This site uses first party cookies only. No third party cookies here.
 
+admin:
+  heading: admin
+  editors: Editors
+  editors_explain: >
+    One email address on each line. When an other number of projects are allowed,
+    then add a comma and the number.
+  max_default_projects: Maximum projects per editor
+
+
 
 vote:
   heading:
-    title: Vote for A
+    title: Vote A
     explain: >
-      The mayors presented their projects to make Antwerp a better place.
-      If you decide over 100 CW that is to be donated to projects. To which projects should it go?
+      If you decide over the destination of 100 cw€ to be donated to projects. To which projects should it go?
   button:
     poorest: My CW to the current poorest project
     equally: My CW Equally to all projects.
