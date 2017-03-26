@@ -3,15 +3,20 @@
 {% for p in pages %}
 
 <div style="position: absolute; left:0; right: 0; top: 0; bottom: 0; ">
-<img src="black.png" style="width: 210mm; height: 297mm; margin: 0; opacity: 0.05;" />
+<img src="img/specimen-tiled.gif" style="width: 210mm; height: 297mm; margin: 0; opacity: 0.15;" />
 </div>
+
+{#
 <div style="position: absolute; left:0; right: 0; top: 0; bottom: 0; ">
 <img src="magenta.png" style="width: 210mm; height: 297mm; margin: 0; opacity: 0.08;" />
 </div>
+#}
 
 <div class="cont">
 
 {% for t in p.tickets %}
+
+{% if loop.first %}<p>&nbsp;</p>{% endif %}
 
 {% if loop.index is odd %}
 <div class="row">
@@ -24,8 +29,8 @@
 </div>
 
 <div class="text">
-<h2>{{ 'ticket.title'|trans() }}</h2>
-<p>{{ 'ticket.text'|trans() }}</p>
+<h2>{{ 'ticket.title'|trans }}</h2>
+<p>{{ 'ticket.text'|trans|raw }}</p>
 </div>
 
 <div class="qrcode">
@@ -33,9 +38,11 @@
 	<small class="batch-n">02</small>
 </div>
 
+{#
 <div class="foot{% if loop.index == loop.length - 1 %} lft{% endif %}">
 <h3>{{ 'ticket.foot'|trans() }}</h3>
 </div>
+#}
 
 </div>
 

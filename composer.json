@@ -27,7 +27,9 @@
 		"symfony/yaml": "^3.2",
 		"symfony/config": "^3.2",
 		"mpdf/mpdf": "^6.1",
-		"symfony/validator": "^3.2"
+		"symfony/validator": "^3.2",
+		"symfony/form": "^3.2",
+		"symfony/security-csrf": "^3.2"
 	},
 
     "minimum-stability": "stable",

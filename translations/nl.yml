@@ -17,8 +17,8 @@ business:
 
 edit:
   title: Plan A, the Community Way
-  heading: Login
-  email_explain: Send an login-token to your mailbox to upload or edit projects.
+  heading: Upload or edit your project.
+  email_explain: Send an login-token to your mailbox to upload or edit your project.
   email: Email
   email_address: Email address
   send_token: Send token
@@ -29,10 +29,10 @@ notice:
   token_send_email: An inlog-token is send to your inbox.
 
 ticket:
-  title: Vote for A
+  title: Kies A
   text: >
-    Visit the URL above or use the QR code on the left and decide
-    how the budget of Community Way euros is distributed over the projects for A.
+    Surf naar de URL hierboven of gebruik de QR-code en beslis mee
+    hoe de begroting in <strong>community way euros (cw€)</strong> wordt verdeeld over de A projecten.
   foot: The Community Way
 
 footer:

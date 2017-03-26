@@ -53,7 +53,7 @@ class edit
 		return $app->json(['notice' => $app->trans('notice.token_send_email');
 	}
 
-	public function img(Request $request, Application $app)
+	public function upload_img(Request $request, Application $app)
 	{
 /*
 	$image = ($_FILES['image']) ?: null;

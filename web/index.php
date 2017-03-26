@@ -6,23 +6,6 @@ use Silex\Application;
 
 $app = require_once __DIR__ . '/../app.php';
 
-$app->register(new Silex\Provider\SecurityServiceProvider(), [
-	'security.firewalls' => [
-		'admin' 	=> [
-			'pattern' 	=> '^/admin',
-			'http' 		=> true,
-			'users' 	=> [
-				'admin' 	=> ['ROLE_ADMIN', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'],
-			],
-		],
-	],
-
-	'security.role_hierarchy' => [
-		'ROLE_ADMIN' => ['ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'],
-	],
-
-]);
-
 //
 
 $app->get('/vote', function (Request $request) use ($app)
@@ -33,7 +16,8 @@ $app->get('/vote', function (Request $request) use ($app)
 //
 
 /*
-$app->get('/projects', function (Request $request) use ($app)
+
+$app->get('/p', function (Request $request) use ($app)
 {
 	$projects = $app['xdb']->get('projects');
 
@@ -43,8 +27,46 @@ $app->get('/projects', function (Request $request) use ($app)
 
 	return $response;
 }
+
 */
-//
+
+$app->get('/p', function (Request $request) use ($app)
+{
+	$token = $app['security.token_storage']->getToken();
+
+
+	$ret =  'token: ' . $token;
+	if (null !== $token)
+	{
+		$user = $token->getUser();
+
+		$ret .= 'user';
+	}
+
+	$ret =  'token: ' . $token;
+	if (null !== $token)
+	{
+		$user = $token->getUser();
+
+		$ret .= ' - user: ' . $user;
+		$ret .= ' - salt: ' . $user->getSalt();
+	}
+
+
+
+		// find the encoder for a UserInterface instance
+	$encoder = $app['security.encoder_factory']->getEncoder($user);
+
+	//$ret .= ' - enc: ' . $encoder;
+
+	// compute the encoded password for foo
+	$password = $encoder->encodePassword($_GET['pass'], '');
+
+	$ret .= "\n";
+	$ret .= 'password: ' . $password;
+
+	return $ret;
+});
 
 $app->get('/business', function (Request $request, Application $app)
 {
@@ -78,30 +100,45 @@ $app->get('/edit', function (Request $request, Application $app)
 
 //
 
-$app->post('/login-token', 'controller\\edit::login_token');
+$app->match('/login', 'controller\\login::login');
 
-//
-
-$app->get('/{token}', function (Request $request, Application $app, $token)
-{
-	$edit_login = $app['xdb']->get('edit_login_' . $token);
-
-	$app['session']->set('edit_login', $edit_login);
-
-	return $app->redirect('/edit');
-
-})->assert('token', '[a-z0-9-]{12}');
+$app->get('/{token}', 'controller\\login::token')->assert('token', '[a-z0-9-]{12}');
 
 
 
-$app->post('/img', 'controller\\edit::img');
+$app->post('/edit/load-img', 'controller\\edit::load_img');
 
 $app->get('/admin', function (Request $request) use ($app)
 {
 
 	$editors = $app['xdb']->get('project_editors');
 
+	$token = $app['security.token_storage']->getToken();
 
+
+	$ret =  'token: ' . $token;
+	if (null !== $token)
+	{
+		$user = $token->getUser();
+
+		$ret .= ' - user: ' . $user;
+		$ret .= ' - salt: ' . $user->getSalt();
+	}
+
+
+
+		// find the encoder for a UserInterface instance
+	$encoder = $app['security.encoder_factory']->getEncoder($user);
+
+	//$ret .= ' - enc: ' . $encoder;
+
+	// compute the encoded password for foo
+	$password = $encoder->encodePassword($_GET['pass'], '');
+
+	$ret .= "\n";
+	$ret .= 'password: ' . $password;
+
+	return $ret;
 
     return $app['twig']->render('admin.html.twig', []);
 });

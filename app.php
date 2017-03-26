@@ -51,6 +51,33 @@ $app->extend('twig', function($twig, $app) {
     return $twig;
 });
 
+$app->register(new Silex\Provider\SecurityServiceProvider(), [
+
+	'security.firewalls' => [
+		'admin' 	=> [
+			'pattern' 	=> '^/admin',
+			'http'		=> true,
+			'users' 	=> [
+				'admin' 	=> ['ROLE_ADMIN', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'],
+			],
+		],
+		'editor'	=> [
+			'pattern'	=> '^/edit',
+			'users'		=> [],
+
+		],
+	],
+
+	'security.role_hierarchy' => [
+		'ROLE_ADMIN' => ['ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'],
+	],
+
+]);
+
+$app->register(new Silex\Provider\FormServiceProvider());
+
+$app->register(new Silex\Provider\ValidatorServiceProvider());
+
 $app->register(new Silex\Provider\MonologServiceProvider(), []);
 
 $app->extend('monolog', function($monolog, $app) {
@@ -72,7 +99,7 @@ $app->register(new Silex\Provider\AssetServiceProvider(), [
 
 $app->register(new Silex\Provider\LocaleServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
-    'locale_fallbacks' => ['en'],
+    'locale_fallbacks' => ['nl', 'en'],
 ));
 
 use Symfony\Component\Translation\Loader\YamlFileLoader;

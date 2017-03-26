@@ -3,10 +3,14 @@
 $app = require_once __DIR__ . '/../app.php';
 
 $page_count = $_GET['pages'] ?? 2;
-$tickets_per_page = $_GET['per_page'] ?? 8;
+$tickets_per_page = $_GET['per_page'] ?? 10;
 $hash_length = $_GET['hash_length'] ?? 8;
 $hyphen_chance = $_GET['hyphen_chance'] ?? 1;
 $err_corr = $_GET['err_corr'] ?? 'Q';
+
+$app->boot();
+
+$app['translator']->setLocale('nl');
 
 ini_set('max_execution_time', 600);
 

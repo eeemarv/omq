@@ -9,7 +9,6 @@ body{
   right: 0;
 }
 
-
 div.cont{
 
  /*       text-align: center;
@@ -20,18 +19,17 @@ position: absolute;
 top: 0;
 bottom: 0;
 left: 0;*/
-
   width: 100%;
   height: 100%;
 /*  border: 1px solid #000; */
-/*  background-color: #cfe;*/
-	z-index: 10;
-  padding: 1mm;
+ background-color: #fee;
+	z-index: -10;
+/*  padding: 1mm; */
 
 }
 
 div.row{
-  height: 5.9cm;
+  height: 5.5cm;
   width: 100%;
 }
 
@@ -45,20 +43,20 @@ div.lft{
 }
 
 div.heading{
-  height: 0.7cm;
+  height: 0.6cm;
   text-align: center;
 }
 
 div.text{
   float: left;
-  width: 4.4cm;
-  margin-left: 0.7cm;
+  width: 5cm;
+  margin-left: 0.5cm;
   padding-right: 0.2cm;
   margin-bottom: 0;
 }
 
 h2{
-  margin: 0.3cm 0 0.3cm 0;
+  margin: 0.1cm 0 0.3cm 0;
 }
 
 h3{

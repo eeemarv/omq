@@ -24,7 +24,7 @@ class redis_session implements \SessionHandlerInterface
 
 	public function read($id)
 	{
-		$id = 'session_' . $id;
+		$id = 'cwvd_session_' . $id;
 		$session_data = $this->redis->get($id);
 		$this->redis->expire($id, $this->ttl);
 		return $session_data;
@@ -32,7 +32,7 @@ class redis_session implements \SessionHandlerInterface
 
 	public function write($id, $session_data)
 	{
-		$id = 'session_' . $id;
+		$id = 'cwvd_session_' . $id;
 		$this->redis->set($id, $session_data);
 		$this->redis->expire($id, $this->ttl);
 		return true;
@@ -40,7 +40,7 @@ class redis_session implements \SessionHandlerInterface
 
 	public function destroy($id)
 	{
-		$this->redis->del('session_' . $id);
+		$this->redis->del('cwvd_session_' . $id);
 		return true;
 	}
 
