@@ -30,44 +30,6 @@ $app->get('/p', function (Request $request) use ($app)
 
 */
 
-$app->get('/p', function (Request $request) use ($app)
-{
-	$token = $app['security.token_storage']->getToken();
-
-
-	$ret =  'token: ' . $token;
-	if (null !== $token)
-	{
-		$user = $token->getUser();
-
-		$ret .= 'user';
-	}
-
-	$ret =  'token: ' . $token;
-	if (null !== $token)
-	{
-		$user = $token->getUser();
-
-		$ret .= ' - user: ' . $user;
-		$ret .= ' - salt: ' . $user->getSalt();
-	}
-
-
-
-		// find the encoder for a UserInterface instance
-	$encoder = $app['security.encoder_factory']->getEncoder($user);
-
-	//$ret .= ' - enc: ' . $encoder;
-
-	// compute the encoded password for foo
-	$password = $encoder->encodePassword($_GET['pass'], '');
-
-	$ret .= "\n";
-	$ret .= 'password: ' . $password;
-
-	return $ret;
-});
-
 $app->get('/business', function (Request $request, Application $app)
 {
 	$projects = $app['redis']->get('projects_enc');

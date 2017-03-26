@@ -58,7 +58,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), [
 			'pattern' 	=> '^/admin',
 			'http'		=> true,
 			'users' 	=> [
-				'admin' 	=> ['ROLE_ADMIN', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'],
+				'admin' 	=> ['ROLE_ADMIN', getenv('ADMIN_PASSWORD')],
 			],
 		],
 		'editor'	=> [
