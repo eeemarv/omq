@@ -40,6 +40,8 @@ footer:
   cookies: This site uses first party cookies only. No third party cookies here.
 
 admin:
+  settings:
+    heading: Admin settings
   heading: admin
   editors: Editors
   editors_explain: >

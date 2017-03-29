@@ -30,7 +30,7 @@ class edit
 
 		$editors = $app['xdb']->get('project_editors');
 
-		if (!isset($editor[$email]))
+		if (!isset($editors[$email]))
 		{
 			return $app->json(['notice' => $app->trans('notice.no_access_email')]);
 		}

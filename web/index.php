@@ -48,11 +48,15 @@ $app->get('/what', function (Request $request) use ($app)
 	]);
 })->bind('what');
 
+$app->get('/qr', 'controller\\pay::qr');
+
 $app->get('/{token}', 'controller\\login::token')->assert('token', '[a-z0-9-]{12}');
 
 $app->post('/edit/load-img', 'controller\\edit::load_img');
 
-$app->get('/admin', 'controller\\admin::admin');
+$app->match('/admin', 'controller\\admin::settings');
+$app->match('/admin/editor/{id}', 'controller\\admin::editor')->assert('id', '\d+');
+
 
 $app->get('/', function (Request $request) use ($app)
 {
