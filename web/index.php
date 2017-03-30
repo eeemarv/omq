@@ -57,14 +57,6 @@ $app->post('/edit/load-img', 'controller\\edit::load_img');
 $app->match('/admin', 'controller\\admin::settings');
 $app->match('/admin/editor/{id}', 'controller\\admin::editor')->assert('id', '\d+');
 
-
-$app->get('/', function (Request $request) use ($app)
-{
-
-
-    return $app['twig']->render('base.html.twig', [
-
-	]);
-});
+$app->get('/', 'controller\\index::home');
 
 $app->run();

@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
-class pay
+class index
 {
 	public function vote(Request $request, Application $app)
 	{
@@ -31,12 +31,12 @@ class pay
 		return $app->redirect('/vote');
 	}
 
-	public function qr(Request $request, Application $app)
+	public function home(Request $request, Application $app)
 	{
 		$token = $app['token']->set_hyphen_chance(9)->set_length(12)->gen();
 
 
-		return $app['twig']->render('pay/qr.html.twig', [
+		return $app['twig']->render('index.html.twig', [
 
 			'voucher_url'	=> 'https://omdev.be/' . $token,
 			'amount'		=> 30,

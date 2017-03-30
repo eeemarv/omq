@@ -3,8 +3,14 @@ language: English
 
 unit: cw€
 
+index:
+  pay: PAY
+
+pay:
+  ready: Ready
+
 navbar:
-  brand: The Community Way
+  brand: Omdev.be wallet
   business: For Businesses
   what: What is CW?
   vote: Vote for A
