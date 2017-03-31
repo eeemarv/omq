@@ -1,6 +1,69 @@
 
 language: English
 
+title: Omdev.be
+
+error:
+  404:
+    heading: 404
+    text: Page not found
+  500:
+    heading: 500
+    text: Internal server error
+
+navbar:
+  brand: Omdev.be wallet
+  business: For Businesses
+  what: What is CW?
+  vote: Vote for A
+  home: Home
+
+login:
+  title: Login
+  heading: Login
+  email: Email
+  password: Password
+  link_password_reset: I lost my password
+  link_register: I want to register
+  submit_btn: Login
+
+password_reset:
+  title: Password reset
+  heading: Password reset
+  email: Email
+  submit_btn: Send
+
+new_password:
+  title: Set a new password
+  heading: Set a new password
+  password: Password
+  password_explain: >
+    Create a password with minimum 6 characters.
+  submit_btn: Send
+
+register:
+  title: Register
+  heading: Register
+  username: Username
+  username_explain: >
+    Maximum 6 lowercase alfanumeric characters. Hyphens between characters can also be used.
+  email: Email
+  email_explain: >
+    An email will be send to you to verify your address
+  password: Password
+  password_explain: >
+    Create a password with minimum 6 characters.
+  accept: I accept the <a href="%url%">terms and conditions.</a>
+  submit_btn: Register
+
+terms:
+  heading: Terms and Conditions
+  text: >
+    <h3>Important</h3>
+    <p>Behave well and we'll do also.</p>
+
+
+
 unit: cw€
 
 index:
@@ -9,12 +72,7 @@ index:
 pay:
   ready: Ready
 
-navbar:
-  brand: Omdev.be wallet
-  business: For Businesses
-  what: What is CW?
-  vote: Vote for A
-  home: Home
+
 
 business:
   title: Plan A, the Community Way

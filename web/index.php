@@ -33,6 +33,10 @@ $app->get('/business', function (Request $request, Application $app)
 $app->match('/login', 'controller\\login::login')->bind('login');
 $app->match('/register', 'controller\\login::register')->bind('register');
 $app->match('/password-reset', 'controller\\login::password_reset')->bind('password-reset');
+$app->get('/terms', 'controller\\login::terms')->bind('terms');
+$app->match('/new-password', 'controller\\login::new_password')->bind('new-password');
+$app->get('/pwr/{token}', 'controller\\login::password_reset_token')
+	->assert('token', '[a-z0-9-]{16}')->bind('password-reset-token');
 
 $app->get('/{token}', 'controller\\vote::token')->assert('token', '[a-z0-9-]{8}');
 

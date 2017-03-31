@@ -7,18 +7,28 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class login
 {
+
+	/**
+	 *
+	 */
+
 	public function login(Request $request, Application $app)
 	{
-		$data = ['email'	=> ''];
+		$data = [
+			'email'		=> '',
+			'password'	=> '',
+		];
 
 		$form = $app['form.factory']->createBuilder(FormType::class, $data)
 			->add('email', EmailType::class)
-			->add('submit', SubmitType::class, [
-				'label' => 'Save',
-			])
+			->add('password', PasswordType::class)
+			->add('submit', SubmitType::class)
 			->getForm();
 
 		$form->handleRequest($request);
@@ -27,21 +37,35 @@ class login
 		{
 			$data = $form->getData();
 
+
+
+
+
 			return $app->redirect('/edit');
 		}
 
 		return $app['twig']->render('login/login.html.twig', ['form' => $form->createView()]);
 	}
 
+	/**
+	 *
+	 */
+
 	public function register(Request $request, Application $app)
 	{
-		$data = ['email'	=> ''];
+		$data = [
+			'username'	=> '',
+			'email'		=> '',
+			'agree'		=> false,
+			'password'	=> '',
+		];
 
 		$form = $app['form.factory']->createBuilder(FormType::class, $data)
+			->add('username', TextType::class)
 			->add('email', EmailType::class)
-			->add('submit', SubmitType::class, [
-				'label' => 'Save',
-			])
+			->add('password', PasswordType::class)
+			->add('accept', CheckboxType::class)
+			->add('submit', SubmitType::class)
 			->getForm();
 
 		$form->handleRequest($request);
@@ -55,16 +79,71 @@ class login
 
 		return $app['twig']->render('login/register.html.twig', ['form' => $form->createView()]);
 	}
+	/**
+	 *
+	 */
+
+	public function terms(Request $request, Application $app)
+	{
+		return $app['twig']->render('login/terms.html.twig', []);
+	}
+
+	/**
+	 *
+	 */
 
 	public function password_reset(Request $request, Application $app)
 	{
-		$data = ['email'	=> ''];
+		$data = [
+			'email'	=> '',
+		];
 
 		$form = $app['form.factory']->createBuilder(FormType::class, $data)
 			->add('email', EmailType::class)
-			->add('submit', SubmitType::class, [
-				'label' => 'Save',
-			])
+			->add('submit', SubmitType::class)
+			->getForm();
+
+		$form->handleRequest($request);
+
+		if ($form->isValid())
+		{
+			$data = $form->getData();
+
+			$email = strtolower($data['email']);
+
+
+
+
+			return $app->redirect('/edit');
+		}
+
+		return $app['twig']->render('login/password_reset.html.twig', ['form' => $form->createView()]);
+	}
+
+	/**
+	 *
+	 */
+
+	public function password_reset_token(Request $request, Application $app, $token)
+	{
+
+
+		return $app['twig']->render('alert.html.twig', ['form' => $form->createView()]);
+	}
+
+	/**
+	 *
+	 */
+
+	public function new_password(Request $request, Application $app)
+	{
+		$data = [
+			'password'	=> '',
+		];
+
+		$form = $app['form.factory']->createBuilder(FormType::class, $data)
+			->add('password', PasswordType::class)
+			->add('submit', SubmitType::class)
 			->getForm();
 
 		$form->handleRequest($request);
@@ -76,7 +155,7 @@ class login
 			return $app->redirect('/edit');
 		}
 
-		return $app['twig']->render('login/password_reset.html.twig', ['form' => $form->createView()]);
+		return $app['twig']->render('login/new_password.html.twig', ['form' => $form->createView()]);
 	}
 
 	/**

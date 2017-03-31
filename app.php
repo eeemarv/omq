@@ -79,6 +79,8 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), [
 
 $app->register(new Silex\Provider\FormServiceProvider());
 
+$app->register(new Silex\Provider\CsrfServiceProvider());
+
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 
 $app->register(new Silex\Provider\MonologServiceProvider(), []);
