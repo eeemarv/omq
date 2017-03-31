@@ -33,7 +33,7 @@ class pay
 
 	public function qr(Request $request, Application $app)
 	{
-		$token = $app['token']->set_hyphen_chance(9)->set_length(12)->gen();
+		$token = $app['token']->set_hyphen_chance(9)->set_length(10)->gen();
 
 
 		return $app['twig']->render('pay/qr.html.twig', [

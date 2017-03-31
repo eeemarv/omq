@@ -30,6 +30,10 @@ $app->get('/business', function (Request $request, Application $app)
 
 })->bind('business');
 
+$app->match('/login', 'controller\\login::login')->bind('login');
+$app->match('/register', 'controller\\login::register')->bind('register');
+$app->match('/password-reset', 'controller\\login::password_reset')->bind('password-reset');
+
 $app->get('/{token}', 'controller\\vote::token')->assert('token', '[a-z0-9-]{8}');
 
 $app->get('/edit', function (Request $request, Application $app)
@@ -39,7 +43,6 @@ $app->get('/edit', function (Request $request, Application $app)
     return $app['twig']->render('edit.html.twig', ['edit_project' => $edit_project]);
 });
 
-$app->match('/login', 'controller\\login::login');
 
 $app->get('/what', function (Request $request) use ($app)
 {
@@ -49,6 +52,7 @@ $app->get('/what', function (Request $request) use ($app)
 })->bind('what');
 
 $app->get('/qr', 'controller\\pay::qr');
+$app->get('/{token}', 'controller\\pay::token')->assert('token', '[a-z0-9-]{10}');
 
 $app->get('/{token}', 'controller\\login::token')->assert('token', '[a-z0-9-]{12}');
 
@@ -57,6 +61,6 @@ $app->post('/edit/load-img', 'controller\\edit::load_img');
 $app->match('/admin', 'controller\\admin::settings');
 $app->match('/admin/editor/{id}', 'controller\\admin::editor')->assert('id', '\d+');
 
-$app->get('/', 'controller\\index::home');
+$app->get('/', 'controller\\index::home')->bind('index');
 
 $app->run();

@@ -30,7 +30,53 @@ class login
 			return $app->redirect('/edit');
 		}
 
-		return $app['twig']->render('login.html.twig', ['form' => $form->createView()]);
+		return $app['twig']->render('login/login.html.twig', ['form' => $form->createView()]);
+	}
+
+	public function register(Request $request, Application $app)
+	{
+		$data = ['email'	=> ''];
+
+		$form = $app['form.factory']->createBuilder(FormType::class, $data)
+			->add('email', EmailType::class)
+			->add('submit', SubmitType::class, [
+				'label' => 'Save',
+			])
+			->getForm();
+
+		$form->handleRequest($request);
+
+		if ($form->isValid())
+		{
+			$data = $form->getData();
+
+			return $app->redirect('/edit');
+		}
+
+		return $app['twig']->render('login/register.html.twig', ['form' => $form->createView()]);
+	}
+
+	public function password_reset(Request $request, Application $app)
+	{
+		$data = ['email'	=> ''];
+
+		$form = $app['form.factory']->createBuilder(FormType::class, $data)
+			->add('email', EmailType::class)
+			->add('submit', SubmitType::class, [
+				'label' => 'Save',
+			])
+			->getForm();
+
+		$form->handleRequest($request);
+
+		if ($form->isValid())
+		{
+			$data = $form->getData();
+
+			return $app->redirect('/edit');
+		}
+
+		return $app['twig']->render('login/password_reset.html.twig', ['form' => $form->createView()]);
 	}
 
 	/**

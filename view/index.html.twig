@@ -44,7 +44,12 @@
 <div class="row">
 <div class="col-md-12">
 
+
+
 <div class="panel panel-default">
+
+{% if transactions %}
+
   <table class="table table-striped">
   <tbody>
 {% for t in transactions %}
@@ -55,7 +60,10 @@
 	<th>Tijd</th><th>Amount</th>
   </tfoot>
   </table>
-  <div class="panel panel-footer">
+
+{% endif %}
+
+<div class="panel-footer">
 	<h3>40 ANT</h3>
 </div>
 </div>

@@ -41,7 +41,7 @@ class index
 			'voucher_url'	=> 'https://omdev.be/' . $token,
 			'amount'		=> 30,
 			'unit'			=> 'Ant',
-
+			'transactions'	=> [],
 		]);
 	}
 
