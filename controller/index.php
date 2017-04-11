@@ -50,12 +50,9 @@ class index
 		$editors = $app['xdb']->get('project_editors');
 		$settings = $app['xdb']->get('settings');
 
-		$settings = [
-			'editors'				=> '',
-			'max_projects_default'	=> 5,
+		$data = [
+			'amount'				=> '',
 		];
-
-		$builder = $app['form.factory']->createBuilder(FormType::class, $settings);
 
 		$builder->add('amount', NumberType::class)
 			->add('submit',SubmitType::class);
@@ -81,12 +78,11 @@ class index
 
 		return $app['twig']->render('admin/settings.html.twig', [
 			'form' 		=> $form->createView(),
-			'editors'	=> $editors,
 		]);
 
 
 //
-		$token = $app['token']->set_hyphen_chance(9)->set_length(12)->gen();
+		$token = $app['token']->set_length(12)->gen();
 
 
 		return $app['twig']->render('pay/pay.html.twig', [

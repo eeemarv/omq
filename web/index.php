@@ -65,6 +65,6 @@ $app->post('/edit/load-img', 'controller\\edit::load_img');
 $app->match('/admin', 'controller\\admin::settings');
 $app->match('/admin/editor/{id}', 'controller\\admin::editor')->assert('id', '\d+');
 
-$app->get('/', 'controller\\index::home')->bind('index');
+$app->get('/', 'controller\\pay::pay')->bind('pay');
 
 $app->run();

@@ -40,6 +40,7 @@ new_password:
   password_explain: >
     Create a password with minimum 6 characters.
   submit_btn: Send
+  generate: Generate
 
 register:
   title: Register
@@ -62,15 +63,13 @@ terms:
     <h3>Important</h3>
     <p>Behave well and we'll do also.</p>
 
-
+pay:
+  heading: Payment
 
 unit: cw€
 
 index:
   pay: PAY
-
-pay:
-  ready: Ready
 
 
 

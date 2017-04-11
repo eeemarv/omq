@@ -56,8 +56,8 @@ class login
 		$data = [
 			'username'	=> '',
 			'email'		=> '',
-			'agree'		=> false,
 			'password'	=> '',
+			'accept'	=> false,
 		];
 
 		$form = $app['form.factory']->createBuilder(FormType::class, $data)
@@ -72,7 +72,6 @@ class login
 
 		if ($form->isValid())
 		{
-			$data = $form->getData();
 
 			return $app->redirect('/edit');
 		}

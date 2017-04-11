@@ -47,26 +47,14 @@ class pay
 
 	public function pay(Request $request, Application $app)
 	{
-		$editors = $app['xdb']->get('project_editors');
-		$settings = $app['xdb']->get('settings');
-
-		$settings = [
-			'editors'				=> '',
-			'max_projects_default'	=> 5,
+		$data = [
+			'amount'				=> 0,
 		];
 
-		$builder = $app['form.factory']->createBuilder(FormType::class, $settings);
+		$builder = $app['form.factory']->createBuilder(FormType::class, $data);
 
 		$builder->add('amount', NumberType::class)
 			->add('submit',SubmitType::class);
-
-
-/*
-			->add('editors', TextareaType::class)
-			->add('default_max_projects', NumberType::class)
-			->add('submit', SubmitType::class, [
-				'label' => 'Save',
-			])*/
 
 		$form = $builder->getForm();
 
@@ -79,9 +67,11 @@ class pay
 			return $app->redirect('/edit');
 		}
 
-		return $app['twig']->render('admin/settings.html.twig', [
-			'form' 		=> $form->createView(),
-			'editors'	=> $editors,
+		return $app['twig']->render('pay/pay.html.twig', [
+			'form' 			=> $form->createView(),
+			'number_format'	=> '0.00',
+			'unit'			=> 'ANT',
+			'transactions'	=> [],
 		]);
 
 
