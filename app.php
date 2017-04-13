@@ -1,7 +1,5 @@
 <?php
 
-use Aws\S3\S3Client;
-
 require_once __DIR__ . '/vendor/autoload.php';
 
 $app = new Silex\Application();
@@ -11,7 +9,7 @@ $app['debug'] = getenv('DEBUG');
 $app['redis'] = function () {
 	try
 	{
-		$url = getenv('REDIS_URL') ?: getenv('REDISCLOUD_URL');
+		$url = getenv('REDIS_URL');
 		$con = parse_url($url);
 
 		if (isset($con['pass']))
@@ -123,8 +121,7 @@ $app->extend('translator', function($translator, $app) {
 $app->register(new Silex\Provider\SessionServiceProvider(), [
 	'session.storage.handler'	=> new service\redis_session($app['redis']),
 	'session.storage.options'	=> [
-		'name'						=> 'cwvote',
-//		'cookie_domain'				=> '.' . getenv('OVERALL_DOMAIN'),
+		'name'						=> 'omv',
 		'cookie_lifetime'			=> 172800,
 	],
 ]);
@@ -144,6 +141,5 @@ $app['token'] = function($app){
 $app['redis_session'] = function($app){
 	return new service\redis_session($app['redis']);
 };
-
 
 return $app;

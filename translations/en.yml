@@ -12,7 +12,7 @@ error:
     text: Internal server error
 
 navbar:
-  brand: Omdev.be wallet
+  brand: Omdev.be Voting
   business: For Businesses
   what: What is CW?
   vote: Vote for A
@@ -40,7 +40,7 @@ new_password:
   password_explain: >
     Create a password with minimum 6 characters.
   submit_btn: Send
-  generate: Generate
+  generate_btn: Generate
 
 register:
   title: Register
@@ -54,8 +54,10 @@ register:
   password: Password
   password_explain: >
     Create a password with minimum 6 characters.
+  generate_btn: Generate
   accept: I accept the <a href="%url%">terms and conditions.</a>
   submit_btn: Register
+
 
 terms:
   heading: Terms and Conditions
@@ -100,7 +102,8 @@ ticket:
 
 footer:
   copyright: Copyright 2017 Omdev.be
-  cookies: This site uses first party cookies only. No third party cookies here.
+  cookies: >
+    This site uses first party essential cookies only. No third party cookies here.
 
 admin:
   settings:

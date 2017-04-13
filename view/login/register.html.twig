@@ -72,6 +72,9 @@
 <button class="btn btn-info" type="button"><i class="fa fa-key"></i></button>
 </span>
 {{ form_widget(form.password, {'attr': {'placeholder': 'register.password' }}) }}
+  <span class="input-group-btn">
+	<button class="btn btn-info" type="button" id="generate">{{ 'register.generate_btn'|trans }}</button>
+  </span>
 </div>
 
 <p>{{ 'register.password_explain'|trans }}</p>
@@ -99,4 +102,6 @@
 
 {% endblock content %}
 
-
+{% block js %}
+<script src="{{ asset('generate_password.js') }}"></script>
+{% endblock js %}
