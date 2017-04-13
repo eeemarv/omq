@@ -2,12 +2,12 @@
 
 namespace controller;
 
-use Silex\Application;
+use util\app;
 use Symfony\Component\HttpFoundation\Request;
 
 class vote
 {
-	public function vote(Request $request, Application $app)
+	public function vote(Request $request, app $app)
 	{
 
 	}
@@ -16,7 +16,7 @@ class vote
 	 *
 	 */
 
-	public function token(Request $request, Application $app, $token)
+	public function token(Request $request, app $app, $token)
 	{
 		$ticket = json_decode($app['xdb']->get('ticket_' . $token), true);
 
@@ -25,7 +25,7 @@ class vote
 		return $app->redirect('/vote');
 	}
 
-	public function edit__dd(Request $request, Application $app)
+	public function edit__dd(Request $request, app $app)
 	{
 
 	}

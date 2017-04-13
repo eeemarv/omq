@@ -2,7 +2,7 @@
 
 namespace controller;
 
-use Silex\Application;
+use util\app;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -18,7 +18,7 @@ class login
 	 *
 	 */
 
-	public function login(Request $request, Application $app)
+	public function login(Request $request, app $app)
 	{
 		$data = [
 			'email'		=> '',
@@ -51,7 +51,7 @@ class login
 	 *
 	 */
 
-	public function register(Request $request, Application $app)
+	public function register(Request $request, app $app)
 	{
 		$data = [
 			'username'	=> '',
@@ -72,8 +72,10 @@ class login
 
 		if ($form->isValid())
 		{
-
-			return $app->redirect('/edit');
+			$app['session']->getFlashBag()->add('success', $app->trans('register.success'));
+			return $app->redirect('login');
+			return $app->redirectToRoute('task_success');
+			return $app->redirect('/register-confirm');
 		}
 
 		return $app['twig']->render('login/register.html.twig', ['form' => $form->createView()]);
@@ -82,7 +84,7 @@ class login
 	 *
 	 */
 
-	public function terms(Request $request, Application $app)
+	public function terms(Request $request, app $app)
 	{
 		return $app['twig']->render('login/terms.html.twig', []);
 	}
@@ -91,7 +93,7 @@ class login
 	 *
 	 */
 
-	public function password_reset(Request $request, Application $app)
+	public function password_reset(Request $request, app $app)
 	{
 		$data = [
 			'email'	=> '',
@@ -123,7 +125,7 @@ class login
 	 *
 	 */
 
-	public function password_reset_token(Request $request, Application $app, $token)
+	public function password_reset_token(Request $request, app $app, $token)
 	{
 
 
@@ -134,7 +136,7 @@ class login
 	 *
 	 */
 
-	public function new_password(Request $request, Application $app)
+	public function new_password(Request $request, app $app)
 	{
 		$data = [
 			'password'	=> '',
@@ -161,7 +163,7 @@ class login
 	 *
 	 */
 
-	public function post(Request $request, Application $app)
+	public function post(Request $request, app $app)
 	{
 		$email = $request->get('email');
 
@@ -201,7 +203,7 @@ class login
 		return $app->json(['notice' => $app->trans('notice.token_send_email')]);
 	}
 
-	public function token(Request $request, Application $app, $token)
+	public function token(Request $request, app $app, $token)
 	{
 		$edit_login = $app['xdb']->get('edit_login_' . $token);
 

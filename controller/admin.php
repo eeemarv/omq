@@ -2,7 +2,7 @@
 
 namespace controller;
 
-use Silex\Application;
+use util\app;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class admin
 {
-	public function settings(Request $request, Application $app)
+	public function settings(Request $request, app $app)
 	{
 		$editors = $app['xdb']->get('project_editors');
 		$settings = $app['xdb']->get('settings');
@@ -57,12 +57,12 @@ class admin
 	 *
 	 */
 
-	public function editor(Request $request, Application $app)
+	public function editor(Request $request, app $app)
 	{
 
 	}
 
-	public function post(Request $request, Application $app)
+	public function post(Request $request, app $app)
 	{
 		$email = $request->get('email');
 
@@ -102,7 +102,7 @@ class admin
 		return $app->json(['notice' => $app->trans('notice.token_send_email')]);
 	}
 
-	public function token(Request $request, Application $app, $token)
+	public function token(Request $request, app $app, $token)
 	{
 		$edit_login = $app['xdb']->get('edit_login_' . $token);
 

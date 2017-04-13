@@ -2,7 +2,7 @@
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Silex\Application;
+use util\app;
 
 $app = require_once __DIR__ . '/../app.php';
 
@@ -13,7 +13,7 @@ $app->get('/vote', function (Request $request) use ($app)
     return $app['twig']->render('vote.html.twig', []);
 });
 
-$app->get('/business', function (Request $request, Application $app)
+$app->get('/business', function (Request $request, app $app)
 {
 	$projects = $app['redis']->get('projects_enc');
 
@@ -40,7 +40,7 @@ $app->get('/pwr/{token}', 'controller\\login::password_reset_token')
 
 $app->get('/{token}', 'controller\\vote::token')->assert('token', '[a-z0-9-]{8}');
 
-$app->get('/edit', function (Request $request, Application $app)
+$app->get('/edit', function (Request $request, app $app)
 {
 	$edit_project = $app['session']->get('edit_project');
 

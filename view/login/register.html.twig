@@ -81,11 +81,11 @@
 
 </p>
 
-{% set accept_label = 'register.accept'|trans({'%url%': path('terms')}) %}
-
 <p>
 
 {{ form_errors(form.accept) }}
+
+{% set accept_label = 'register.accept'|trans({'%url%': path('terms')}) %}
 
 {{ form_widget(form.accept, {'label': accept_label}) }}
 

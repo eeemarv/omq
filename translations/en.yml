@@ -57,6 +57,7 @@ register:
   generate_btn: Generate
   accept: I accept the <a href="%url%">terms and conditions.</a>
   submit_btn: Register
+  success: Check your email
 
 
 terms:

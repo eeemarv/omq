@@ -2,12 +2,12 @@
 
 namespace controller;
 
-use Silex\Application;
+use util\app;
 use Symfony\Component\HttpFoundation\Request;
 
 class edit
 {
-	public function edit(Request $request, Application $app)
+	public function edit(Request $request, app $app)
 	{
 
 	}
@@ -16,7 +16,7 @@ class edit
 	 *
 	 */
 
-	public function login_token(Request $request, Application $app)
+	public function login_token(Request $request, app $app)
 	{
 		$email = $request->get('email');
 
@@ -53,7 +53,7 @@ class edit
 		return $app->json(['notice' => $app->trans('notice.token_send_email');
 	}
 
-	public function upload_img(Request $request, Application $app)
+	public function upload_img(Request $request, app $app)
 	{
 /*
 	$image = ($_FILES['image']) ?: null;

@@ -2,7 +2,7 @@
 
 namespace controller;
 
-use Silex\Application;
+use util\app;
 use Symfony\Component\HttpFoundation\Request;
 
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class pay
 {
-	public function vote(Request $request, Application $app)
+	public function vote(Request $request, app $app)
 	{
 
 	}
@@ -22,7 +22,7 @@ class pay
 	 *
 	 */
 
-	public function token(Request $request, Application $app, $token)
+	public function token(Request $request, app $app, $token)
 	{
 		$ticket = json_decode($app['xdb']->get('ticket_' . $token), true);
 
@@ -31,7 +31,7 @@ class pay
 		return $app->redirect('/vote');
 	}
 
-	public function qr(Request $request, Application $app)
+	public function qr(Request $request, app $app)
 	{
 		$token = $app['token']->set_hyphen_chance(9)->set_length(10)->gen();
 
@@ -45,7 +45,7 @@ class pay
 		]);
 	}
 
-	public function pay(Request $request, Application $app)
+	public function pay(Request $request, app $app)
 	{
 		$data = [
 			'amount'				=> 0,
