@@ -22,13 +22,15 @@ $mailer->getTransport()->stop();
 $app['xdb']->set('boot', []);
 $boot = json_decode($app['xdb']->get('boot'), true)['version'];
 
-echo 'mail service started .. ' . $boot . "\n";
+$app['monolog']->debug('mail service started .. ' . $boot);
 
 $loop_count = 1;
 
 $domain = getenv('DOMAIN');
 
 $from_noreply_address = getenv('MAIL_NOREPLY_ADDRESS');
+
+$app->boot();
 
 while (true)
 {
@@ -41,7 +43,12 @@ while (true)
 
 	$loop_count++;
 
-	$mail = $app['redis']->rpop('cwv_email_queue');
+	$mail = $app['redis']->rpop('omv_mail_queue_high_priority');
+
+	if (!$mail)
+	{
+		$mail = $app['redis']->rpop('omv_mail_queue_low_priority');
+	}
 
 	if (!$mail)
 	{
@@ -52,6 +59,7 @@ while (true)
 
 	$to = $mail_ary['to'];
 	$template = $mail_ary['template'];
+	$subject = $mail_ary['subject'];
 
 	if (!$to)
 	{
@@ -65,14 +73,20 @@ while (true)
 		continue;
 	}
 
-	$template_html = $this->twig->loadTemplate('mail/' . $template . '.html.twig');
-	$template_text = $this->twig->loadTemplate('mail/' . $template . '.text.twig');
+	if (!$subject)
+	{
+		$app['monolog']->error('mail error: no subject');
+		continue;
+	}
+
+	$template_html = $app['twig']->loadTemplate('mail/' . $template . '.html.twig');
+	$template_text = $app['twig']->loadTemplate('mail/' . $template . '.text.twig');
 
 	$text = $template_text->render($mail_ary);
 	$html = $template_html->render($mail_ary);
 
 	$message = \Swift_Message::newInstance()
-		->setSubject($app->trans('mail.' . $template . '.subject'))
+		->setSubject($app->trans($subject))
 		->setBody($text)
 		->addPart($html, 'text/html')
 		->setTo($to)

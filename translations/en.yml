@@ -59,6 +59,13 @@ register:
   submit_btn: Register
   success: Check your email
 
+mail_register_confirm:
+  subject: Confirm your registration
+  top: Please confirm your registration by clicking on the link below.
+  bottom: If you didn't register at omdev, please ignore this mail.
+
+
+
 
 terms:
   heading: Terms and Conditions

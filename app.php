@@ -138,8 +138,42 @@ $app['token'] = function($app){
 	return new service\token();
 };
 
+$app['mail'] = function($app){
+	return new service\mail($app['redis']);
+};
+
 $app['redis_session'] = function($app){
 	return new service\redis_session($app['redis']);
 };
+
+/*
+$app->register(new Silex\Provider\HttpFragmentServiceProvider());
+$app->register(new Silex\Provider\ServiceControllerServiceProvider());
+
+$app->register(new Silex\Provider\WebProfilerServiceProvider(), array(
+    'profiler.cache_dir' => __DIR__.'/../cache/profiler',
+    'profiler.mount_prefix' => '/_profiler',
+));
+*/
+
+$app->error(function (\Exception $e, Symfony\Component\HttpFoundation\Request $request, $code) use ($app) {
+    if ($app['debug'])
+    {
+        return;
+    }
+
+    // ... logic to handle the error and return a Response
+
+	switch ($code) {
+		case 404:
+			$message = '400. The requested page could not be found.';
+			break;
+		default:
+			$message =  $code . '. We are sorry, but something went wrong.';
+	}
+
+    return new Response($message);
+});
+
 
 return $app;

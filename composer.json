@@ -29,7 +29,12 @@
 		"mpdf/mpdf": "^6.1",
 		"symfony/validator": "^3.2",
 		"symfony/form": "^3.2",
-		"symfony/security-csrf": "^3.2"
+		"symfony/security-csrf": "^3.2",
+		"silex/web-profiler": "^2.0",
+		"symfony/debug-bundle": "^3.2",
+		"symfony/monolog-bridge": "^3.2",
+		"symfony/console": "^3.2",
+		"symfony/process": "^3.2"
 	},
 
     "minimum-stability": "stable",

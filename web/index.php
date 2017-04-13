@@ -32,6 +32,8 @@ $app->get('/business', function (Request $request, app $app)
 
 $app->match('/login', 'controller\\login::login')->bind('login');
 $app->match('/register', 'controller\\login::register')->bind('register');
+$app->get('/register-confirm/{token}', 'controller\\login::register_confirm')
+	->assert('token', '[a-z0-9-]{20}')->bind('register_confirm');
 $app->match('/password-reset', 'controller\\login::password_reset')->bind('password-reset');
 $app->get('/terms', 'controller\\login::terms')->bind('terms');
 $app->match('/new-password', 'controller\\login::new_password')->bind('new-password');

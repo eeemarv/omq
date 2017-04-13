@@ -72,6 +72,22 @@ class login
 
 		if ($form->isValid())
 		{
+			$data = $form->getData();
+			$data['subject'] = 'mail_register_confirm.subject';
+			$data['template'] = 'register_confirm';
+			$data['to'] = $data['email'];
+
+			$token = $app['token']->set_length(20)->gen();
+
+			$data['url'] = $app->url('register_confirm', ['token' => $token]);
+			$data['token'] = $token;
+
+			$redis_key = 'omv_register_confirm_' . $token;
+			$app['redis']->set($redis_key, json_encode($data));
+			$app['redis']->expire($redis_key, 14400);
+
+			$app['mail']->queue_priority($data);
+
 			$app['session']->getFlashBag()->add('success', $app->trans('register.success'));
 			return $app->redirect('login');
 			return $app->redirectToRoute('task_success');
@@ -79,6 +95,22 @@ class login
 		}
 
 		return $app['twig']->render('login/register.html.twig', ['form' => $form->createView()]);
+	}
+	/**
+	 *
+	 */
+	/**
+	 *
+	 */
+
+	public function register_confirm(Request $request, app $app, $token)
+	{
+		$redis_key = 'omv_register_confirm_' . $token;
+		$data = $app['redis']->get($redis_key);
+		$data = json_decode($data, true);
+		dump($data);
+
+		return 'heeleljmsqlkfjmqf -- -- ' . $token;
 	}
 	/**
 	 *
