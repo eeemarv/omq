@@ -14,6 +14,5 @@ node_modules
 *.epub
 *.mobi
 *.pdf
-assets
 .env
 cache
