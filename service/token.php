@@ -61,11 +61,11 @@ class token
 		{
 			if ($ch === '-')
 			{
-				$ch = $this->chars[mt_rand(0, $this->chars_len)];
+				$ch = $this->chars[random_int(0, $this->chars_len)];
 			}
 			else
 			{
-				$ch = $this->chars_h[mt_rand(0, $this->chars_h_len)];
+				$ch = $this->chars_h[random_int(0, $this->chars_h_len)];
 			}
 
 			$token .= $ch;
