@@ -96,7 +96,7 @@ class auth
 
 			$data['subject'] = 'mail_register_confirm.subject';
 			$data['template'] = 'register_confirm';
-			$data['to'] = $data['email'];
+			$data['to'] = $data['email'] = strtolower($data['email']);
 
 			$token = $app['token']->set_length(20)->gen();
 
@@ -176,7 +176,9 @@ class auth
 		];
 
 		$form = $app->form($data)
-			->add('email', EmailType::class)
+			->add('email', EmailType::class, [
+				'constraints' => new Assert\Email(),
+			])
 			->add('submit', SubmitType::class)
 			->getForm();
 
