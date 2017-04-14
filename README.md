@@ -16,14 +16,10 @@ Redis plugin [https://github.com/dokku/dokku-redis]
 
 ### Postgres
 
-Create extention uuid-ossp (for generating random uuids)
+Login postgres cli:
 
 ```shell
 dokku postgres:connect dbname
-```
-
-```sql
-create extension if not exists "uuid-ossp";
 ```
 
 Create schema xdb
