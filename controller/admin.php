@@ -86,18 +86,18 @@ class admin
 
 		$token = $app['token']->set_length(12)->gen();
 
-		$key = 'cwv_login_token_' . $token;
+		$key = 'login_token_' . $token;
 
-		$app['redis']->set($key, $email);
-		$app['redis']->expire($key, 14400); // 4 hours;
+		$app['predis']->set($key, $email);
+		$app['predis']->expire($key, 14400); // 4 hours;
 
 		$host = $request->getHost();
 
-		$app['redis']->lpush('cwv_email_queue', json_encode([
+		$app['mail']->queue([
 			'template'	=> 'login_token',
 			'to'		=> $email,
 			'url'		=> $host . '/' . $token,
-		]));
+		]);
 
 		return $app->json(['notice' => $app->trans('notice.token_send_email')]);
 	}

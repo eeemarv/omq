@@ -43,11 +43,11 @@ while (true)
 
 	$loop_count++;
 
-	$mail = $app['redis']->rpop('omv_mail_queue_high_priority');
+	$mail = $app['predis']->rpop('mail_queue_high_priority');
 
 	if (!$mail)
 	{
-		$mail = $app['redis']->rpop('omv_mail_queue_low_priority');
+		$mail = $app['predis']->rpop('mail_queue_low_priority');
 	}
 
 	if (!$mail)

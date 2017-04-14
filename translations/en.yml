@@ -61,6 +61,17 @@ register:
   submit_btn: Register
   success: Check your email
 
+register_confirm:
+  already_done:
+    subject: Registration was already completed.
+    text: You have already an account with this email address.
+  not_found:
+    subject: Token not found
+    text: The token for registration is not valid anymore. Please try to register again.
+  success:
+    subject: Registration completed
+    text: You may now login with your password and email address.
+
 mail_register_confirm:
   subject: Confirm your registration
   top: Please confirm your registration by clicking on the link below.

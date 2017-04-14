@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class auth
 {
@@ -102,9 +103,9 @@ class auth
 			$data['url'] = $app->url('register_confirm', ['token' => $token]);
 			$data['token'] = $token;
 
-			$redis_key = 'omv_register_confirm_' . $token;
-			$app['redis']->set($redis_key, json_encode($data));
-			$app['redis']->expire($redis_key, 14400);
+			$redis_key = 'register_confirm_' . $token;
+			$app['predis']->set($redis_key, json_encode($data));
+			$app['predis']->expire($redis_key, 14400);
 
 			$app['mail']->queue_priority($data);
 
@@ -121,23 +122,47 @@ class auth
 
 	public function register_confirm(Request $request, app $app, $token)
 	{
-		$redis_key = 'omv_register_confirm_' . $token;
-		$data = $app['redis']->get($redis_key);
+		$redis_key = 'register_confirm_' . $token;
+		$data = $app['predis']->get($redis_key);
 
 		if (!$data)
 		{
-			return $app['twig']->render('auth/register_confirm_not_found.html.twig', []);
+			return $app['twig']->render('page/panel_danger.html.twig', [
+				'subject'	=> 'register_confirm.not_found.subject',
+				'text'		=> 'register_confirm.not_found.text',
+			]);
 		}
-
-		$app['xdb']->search(['email' => $data['email'], 'type' => 'user']);
 
 		$data = json_decode($data, true);
 
+		$count = $app['xdb']->search(['email' => $data['email'], 'type' => 'user']);
 
+		if ($count)
+		{
+			return $app['twig']->render('page/panel_danger.html.twig', [
+				'subject'	=> 'register_confirm.already_done.subject',
+				'text'		=> 'register_confirm.already_done.text',
+			]);
+		}
 
-		dump($data);
+		do
+		{
+			$id = $app['uuid']->gen();
+			$exists = $app['xdb']->exists($id);
+		}
+		while ($exists);
 
-		return 'heeleljmsqlkfjmqf -- -- ' . $token;
+		$data['uuid'] = $id;
+		$data['type'] = 'user';
+
+		$app['xdb']->set('user_' . $id, $data);
+
+		$app['predis']->del($redis_key);
+
+		return $app['twig']->render('page/panel_success.html.twig', [
+			'subject'	=> 'register_confirm.success.subject',
+			'text'		=> 'register_confirm.success.text',
+		]);
 	}
 
 	/**
@@ -238,18 +263,18 @@ class auth
 
 		$token = $app['token']->set_length(12)->gen();
 
-		$key = 'cwv_login_token_' . $token;
+		$key = 'login_token_' . $token;
 
-		$app['redis']->set($key, $email);
-		$app['redis']->expire($key, 14400); // 4 hours;
+		$app['predis']->set($key, $email);
+		$app['predis']->expire($key, 14400); // 4 hours;
 
 		$host = $request->getHost();
 
-		$app['redis']->lpush('cwv_email_queue', json_encode([
+		$app['mail']->queue([
 			'template'	=> 'login_token',
 			'to'		=> $email,
 			'url'		=> $host . '/' . $token,
-		]));
+		]);
 
 		return $app->json(['notice' => $app->trans('notice.token_send_email')]);
 	}

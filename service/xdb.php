@@ -90,9 +90,9 @@ class xdb
 		{
 			$this->db->insert('xdb.events', $insert);
 
-			$this->redis->set('cwv_xdb_' . $id, $json);
+			$this->redis->set('xdb_' . $id, $json);
 
-			$key = 'cwv_xdb_' . $version . '_' . $id;
+			$key = 'xdb_' . $version . '_' . $id;
 
 			$this->redis->set($key, $json);
 			$this->redis->expire($key, 86400);
@@ -114,7 +114,7 @@ class xdb
 
 		if ($version === 0)
 		{
-			$key = 'cwv_xdb_' . $id;
+			$key = 'xdb_' . $id;
 
 			$json = $this->redis->get($key);
 
@@ -140,7 +140,7 @@ class xdb
 			}
 		}
 
-		$key = 'cwv_xdb_' . $version . '_' . $id;
+		$key = 'xdb_' . $version . '_' . $id;
 
 		$json = $this->redis->get($key);
 
@@ -161,6 +161,32 @@ class xdb
 		}
 
 		return '{}';
+	}
+
+	/**
+	 *
+	 */
+
+	public function exists(string $id)
+	{
+		$key = 'xdb_' . $id;
+
+		$json = $this->redis->get($key);
+
+		if ($json)
+		{
+			return true;
+		}
+
+		$id = $this->db->fetchColumn('select id from xdb.events e1
+			where e1.id = ?', [$id]);
+
+		if ($id)
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	/*
@@ -184,6 +210,11 @@ class xdb
 			from xdb.events' . $sql_where, $sql_param);
 
 		$ids = [];
+
+		if (!$fetch)
+		{
+			return [];
+		}
 
 		foreach ($fetch as $f)
 		{

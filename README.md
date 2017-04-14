@@ -2,7 +2,7 @@
 
 ## Installation
 
-###Dokku
+### Dokku
 
 See the [Dokku installation guide](http://dokku.viewdocs.io/dokku/getting-started/installation).
 
@@ -14,16 +14,33 @@ Postgres plugin  [https://github.com/dokku/dokku-postgres]
 
 Redis plugin [https://github.com/dokku/dokku-redis]
 
-###AWS S3
-Create a IAM user on AWS with access only to S3. Then create a bucket in your region for images to be uploaded.
+### Postgres
 
-
+Create extention uuid-ossp (for generating random uuids)
 
 ```shell
-dokku config:set S3_IMG=img.letsa.net S3_DOC=doc.letsa.net
+dokku postgres:connect dbname
 ```
 
-###Email
+```sql
+create extension if not exists "uuid-ossp";
+```
+
+Create schema xdb
+```sql
+create schema xdb;
+```
+Create events table in xdb schema. See [./service/xdb.php]
+
+### AWS S3
+Create a IAM user on AWS with access only to S3. Then create a bucket in your region for images to be uploaded.
+
+Set env variable S3_IMG to the url of the bucket:
+```shell
+dokku config:set appname S3_IMG=
+```
+
+### Email
 
 Set env  SMTP mailserver (e.i. Amazon Simple Email Service)
 * SMTP_HOST

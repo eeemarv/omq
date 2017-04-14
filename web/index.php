@@ -15,7 +15,7 @@ $app->get('/vote', function (Request $request) use ($app)
 
 $app->get('/business', function (Request $request, app $app)
 {
-	$projects = $app['redis']->get('projects_enc');
+	$projects = $app['predis']->get('projects_enc');
 
 	if (!$projects)
 	{

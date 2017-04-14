@@ -8,7 +8,8 @@ $app['debug'] = getenv('DEBUG');
 
 $app['route_class'] = 'util\route';
 
-$app['redis'] = function () {
+/*
+$app['predis'] = function () {
 	try
 	{
 		$url = getenv('REDIS_URL');
@@ -30,6 +31,15 @@ $app['redis'] = function () {
 		exit;
 	}
 };
+*/
+
+$app->register(new Predis\Silex\ClientServiceProvider(), [
+	'predis.parameters' => getenv('REDIS_URL'),
+	'predis.options'    => [
+		'prefix'  => 'omv_',
+	],
+]);
+
 
 $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => [
@@ -121,7 +131,7 @@ $app->extend('translator', function($translator, $app) {
 
 
 $app->register(new Silex\Provider\SessionServiceProvider(), [
-	'session.storage.handler'	=> new service\redis_session($app['redis']),
+	'session.storage.handler'	=> new service\redis_session($app['predis']),
 	'session.storage.options'	=> [
 		'name'						=> 'omv',
 		'cookie_lifetime'			=> 172800,
@@ -129,7 +139,7 @@ $app->register(new Silex\Provider\SessionServiceProvider(), [
 ]);
 
 $app['xdb'] = function($app){
-	return new service\xdb($app['db'], $app['redis'], $app['monolog']);
+	return new service\xdb($app['db'], $app['predis'], $app['monolog']);
 };
 
 $app['s3'] = function($app){
@@ -140,12 +150,16 @@ $app['token'] = function($app){
 	return new service\token();
 };
 
+$app['uuid'] = function($app){
+	return new service\uuid();
+};
+
 $app['mail'] = function($app){
-	return new service\mail($app['redis']);
+	return new service\mail($app['predis']);
 };
 
 $app['redis_session'] = function($app){
-	return new service\redis_session($app['redis']);
+	return new service\redis_session($app['predis']);
 };
 
 /*
