@@ -162,5 +162,35 @@ class xdb
 
 		return '{}';
 	}
+
+	/*
+	 *
+	 */
+
+	public function search(array $ary)
+	{
+		$sql_where = [];
+		$sql_param = [];
+
+		foreach ($ary as $key => $val)
+		{
+			$sql_where[] = ' data->>\'' . $key . '\' = ? ';
+			$sql_param[] = $val;
+		}
+
+		$sql_where = count($sql_where) ? ' where ' . implode(' and ', $sql_where) : '';
+
+		$fetch = $this->db->fetchAssoc('select distinct id
+			from xdb.events' . $sql_where, $sql_param);
+
+		$ids = [];
+
+		foreach ($fetch as $f)
+		{
+			$ids[] = $f['id'];
+		}
+
+		return $ids;
+	}
 }
 

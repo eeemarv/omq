@@ -26,8 +26,12 @@ class auth
 		];
 
 		$form = $app->form($data)
-			->add('email', EmailType::class)
-			->add('password', PasswordType::class)
+			->add('email', EmailType::class, [
+				'constraints' => new Assert\Email(),
+			])
+			->add('password', PasswordType::class, [
+				'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 6])],
+			])
 			->add('submit', SubmitType::class)
 			->getForm();
 
@@ -61,10 +65,25 @@ class auth
 		];
 
 		$form = $app->form($data)
-//			->add('username', TextType::class)
-			->add('email', EmailType::class)
-			->add('password', PasswordType::class)
-			->add('accept', CheckboxType::class)
+
+/*
+			->add('username', TextType::class, [
+				'constraints'	=> [
+					new Assert\Length(['min' => 2, 'max' => 6]),
+					new Assert\Regex('[a-z0-9-]'),
+				]
+ 			])
+ */
+
+			->add('email', EmailType::class, [
+				'constraints' => new Assert\Email(),
+			])
+			->add('password', PasswordType::class, [
+				'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 6])],
+			])
+			->add('accept', CheckboxType::class, [
+				'constraints' => new Assert\IsTrue(),
+			])
 			->add('submit', SubmitType::class)
 			->getForm();
 
@@ -73,6 +92,7 @@ class auth
 		if ($form->isValid())
 		{
 			$data = $form->getData();
+
 			$data['subject'] = 'mail_register_confirm.subject';
 			$data['template'] = 'register_confirm';
 			$data['to'] = $data['email'];
@@ -94,9 +114,7 @@ class auth
 
 		return $app['twig']->render('auth/register.html.twig', ['form' => $form->createView()]);
 	}
-	/**
-	 *
-	 */
+
 	/**
 	 *
 	 */
@@ -105,7 +123,18 @@ class auth
 	{
 		$redis_key = 'omv_register_confirm_' . $token;
 		$data = $app['redis']->get($redis_key);
+
+		if (!$data)
+		{
+			return $app['twig']->render('auth/register_confirm_not_found.html.twig', []);
+		}
+
+		$app['xdb']->search(['email' => $data['email'], 'type' => 'user']);
+
 		$data = json_decode($data, true);
+
+
+
 		dump($data);
 
 		return 'heeleljmsqlkfjmqf -- -- ' . $token;
