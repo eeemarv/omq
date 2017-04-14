@@ -6,6 +6,8 @@ $app = new util\app();
 
 $app['debug'] = getenv('DEBUG');
 
+$app['route_class'] = 'util\route';
+
 $app['redis'] = function () {
 	try
 	{

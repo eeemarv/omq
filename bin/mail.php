@@ -94,7 +94,7 @@ while (true)
 
 	if ($mailer->send($message, $failed_recipients))
 	{
-		$app['monolog']->debug('mail verify send to ' . $to);
+		$app['monolog']->debug('mail ' . $template . ' send to ' . $to);
 	}
 	else
 	{

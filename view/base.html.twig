@@ -20,16 +20,19 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="#">{{ 'navbar.brand'|trans }}</a>
 {#   <a class="btn btn-default navbar-btn" href="{{ path('login') }}"><i class="fa fa-sign-in"></i> Sign in</a> #}
-{#   <a class="btn btn-default navbar-btn"><i class="fa fa-user"></i></a></div> #}
+{#   <a class="btn btn-default navbar-btn"><i class="fa fa-user"></i></a> #}
 
- {#
+    </div>
+
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="{{ path('what') }}">{{ 'navbar.what'|trans }}</a></li>
-        <li><a href="{{ path('business') }}">{{ 'navbar.business'|trans }}</a></li>
+ {#        <li><a href="{{ path('what') }}">{{ 'navbar.what'|trans }}</a></li>
+        <li><a href="{{ path('business') }}">{{ 'navbar.business'|trans }}</a></li> #}
+        <li><a href="{{ path('login') }}">{{ 'navbar.login'|trans }}</a></li>
+        <li><a href="{{ path('register') }}">{{ 'navbar.register'|trans }}</a></li>
       </ul>
     </div>
-#}
+
   </div>
 </nav>
 

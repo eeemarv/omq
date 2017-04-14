@@ -30,15 +30,16 @@ $app->get('/business', function (Request $request, app $app)
 
 })->bind('business');
 
-$app->match('/login', 'controller\\login::login')->bind('login');
-$app->match('/register', 'controller\\login::register')->bind('register');
-$app->get('/register-confirm/{token}', 'controller\\login::register_confirm')
+$app->match('/login', 'controller\\auth::login')->bind('login');
+$app->match('/register', 'controller\\auth::register')->bind('register');
+$app->get('/rc/{token}', 'controller\\auth::register_confirm')
 	->assert('token', '[a-z0-9-]{20}')->bind('register_confirm');
-$app->match('/password-reset', 'controller\\login::password_reset')->bind('password-reset');
-$app->get('/terms', 'controller\\login::terms')->bind('terms');
+$app->match('/password-reset', 'controller\\auth::password_reset')->bind('password-reset');
 $app->match('/new-password', 'controller\\login::new_password')->bind('new-password');
 $app->get('/pwr/{token}', 'controller\\login::password_reset_token')
-	->assert('token', '[a-z0-9-]{16}')->bind('password-reset-token');
+	->assert('token', '[a-z0-9-]{20}')->bind('password-reset-token');
+
+$app->get('/terms', 'controller\\page::terms')->bind('terms');
 
 $app->get('/{token}', 'controller\\vote::token')->assert('token', '[a-z0-9-]{8}');
 

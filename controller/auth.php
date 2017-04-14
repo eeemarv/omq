@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
-class login
+class auth
 {
 
 	/**
@@ -25,7 +25,7 @@ class login
 			'password'	=> '',
 		];
 
-		$form = $app['form.factory']->createBuilder(FormType::class, $data)
+		$form = $app->form($data)
 			->add('email', EmailType::class)
 			->add('password', PasswordType::class)
 			->add('submit', SubmitType::class)
@@ -41,10 +41,10 @@ class login
 
 
 
-			return $app->redirect('/edit');
+			return $app->redirect('edit');
 		}
 
-		return $app['twig']->render('login/login.html.twig', ['form' => $form->createView()]);
+		return $app['twig']->render('auth/login.html.twig', ['form' => $form->createView()]);
 	}
 
 	/**
@@ -54,14 +54,14 @@ class login
 	public function register(Request $request, app $app)
 	{
 		$data = [
-			'username'	=> '',
+//			'username'	=> '',
 			'email'		=> '',
 			'password'	=> '',
 			'accept'	=> false,
 		];
 
-		$form = $app['form.factory']->createBuilder(FormType::class, $data)
-			->add('username', TextType::class)
+		$form = $app->form($data)
+//			->add('username', TextType::class)
 			->add('email', EmailType::class)
 			->add('password', PasswordType::class)
 			->add('accept', CheckboxType::class)
@@ -90,11 +90,9 @@ class login
 
 			$app['session']->getFlashBag()->add('success', $app->trans('register.success'));
 			return $app->redirect('login');
-			return $app->redirectToRoute('task_success');
-			return $app->redirect('/register-confirm');
 		}
 
-		return $app['twig']->render('login/register.html.twig', ['form' => $form->createView()]);
+		return $app['twig']->render('auth/register.html.twig', ['form' => $form->createView()]);
 	}
 	/**
 	 *
@@ -112,14 +110,6 @@ class login
 
 		return 'heeleljmsqlkfjmqf -- -- ' . $token;
 	}
-	/**
-	 *
-	 */
-
-	public function terms(Request $request, app $app)
-	{
-		return $app['twig']->render('login/terms.html.twig', []);
-	}
 
 	/**
 	 *
@@ -131,7 +121,7 @@ class login
 			'email'	=> '',
 		];
 
-		$form = $app['form.factory']->createBuilder(FormType::class, $data)
+		$form = $app->form($data)
 			->add('email', EmailType::class)
 			->add('submit', SubmitType::class)
 			->getForm();
@@ -150,7 +140,7 @@ class login
 			return $app->redirect('/edit');
 		}
 
-		return $app['twig']->render('login/password_reset.html.twig', ['form' => $form->createView()]);
+		return $app['twig']->render('auth/password_reset.html.twig', ['form' => $form->createView()]);
 	}
 
 	/**
@@ -174,7 +164,7 @@ class login
 			'password'	=> '',
 		];
 
-		$form = $app['form.factory']->createBuilder(FormType::class, $data)
+		$form = $app->form($data)
 			->add('password', PasswordType::class)
 			->add('submit', SubmitType::class)
 			->getForm();
@@ -188,7 +178,7 @@ class login
 			return $app->redirect('/edit');
 		}
 
-		return $app['twig']->render('login/new_password.html.twig', ['form' => $form->createView()]);
+		return $app['twig']->render('auth/new_password.html.twig', ['form' => $form->createView()]);
 	}
 
 	/**
@@ -235,13 +225,17 @@ class login
 		return $app->json(['notice' => $app->trans('notice.token_send_email')]);
 	}
 
+	/**
+	 *
+	 */
+
 	public function token(Request $request, app $app, $token)
 	{
 		$edit_login = $app['xdb']->get('edit_login_' . $token);
 
 		$app['session']->set('edit_login', $edit_login);
 
-		return $app->redirect('/edit');
+		return $app->redirect('edit');
 	}
 }
 

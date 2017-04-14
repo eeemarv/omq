@@ -2,7 +2,7 @@
 	"name": "eeemarv/cwvote",
 	"license": "MIT",
 	"type": "project",
-	"description": "voting for community way currency.",
+	"description": "voting website with qr-code tickets",
 
     "require": {
 		"php": "^7",
