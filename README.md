@@ -1,7 +1,7 @@
 # omd voting web app
 
-* [#installation](Installation)
-* [#usage](Usage)
+* [Installation](#installation)
+* [Usage](#usage)
 
 ## Installation
 
@@ -13,11 +13,11 @@ See the [Dokku installation guide](http://dokku.viewdocs.io/dokku/getting-starte
 
 * Create app, install postgres, redis and letsencrypt plugins and bind them to to the app (see Dokku guide).
 
-[https://github.com/dokku/dokku-postgres](Postgres plugin)
+[Postgres plugin](https://github.com/dokku/dokku-postgres)
 
-[https://github.com/dokku/dokku-redis](Redis plugin)
+[Redis plugin](https://github.com/dokku/dokku-redis)
 
-[https://github.com/dokku/dokku-letsencrypt](Letsencrypt plugin)
+[Letsencrypt plugin](https://github.com/dokku/dokku-letsencrypt)
 
 ### Postgres
 
@@ -31,7 +31,7 @@ Create schema xdb
 ```sql
 create schema xdb;
 ```
-Create events table in xdb schema. See [service/xdb.php] .
+Create events table in xdb schema. See [service/xdb.php](service/xdb.php) .
 
 ### AWS S3
 Create a IAM user on AWS with access only to S3. Then create a bucket in your region for images to be uploaded.
