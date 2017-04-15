@@ -1,5 +1,8 @@
 # omd voting web app
 
+* [#installation](Installation)
+* [#usage](Usage)
+
 ## Installation
 
 ### Dokku
@@ -61,7 +64,8 @@ dokku config:set appname MAIL_NOREPLY_ADDRESS=noreply@my-domain.com
 
 This address should be set up for DKIM in the mailserver.
 
+## Usage
 
-
+... info will come soon
 
 
