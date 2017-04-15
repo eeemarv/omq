@@ -31,13 +31,15 @@ $app->get('/business', function (Request $request, app $app)
 })->bind('business');
 
 $app->match('/login', 'controller\\auth::login')->bind('login');
+
 $app->match('/register', 'controller\\auth::register')->bind('register');
-$app->get('/rc/{token}', 'controller\\auth::register_confirm')
+$app->get('/register/{token}', 'controller\\auth::register_confirm')
 	->assert('token', '[a-z0-9-]{20}')->bind('register_confirm');
-$app->match('/password-reset', 'controller\\auth::password_reset')->bind('password-reset');
-$app->match('/new-password', 'controller\\login::new_password')->bind('new-password');
-$app->get('/pwr/{token}', 'controller\\login::password_reset_token')
-	->assert('token', '[a-z0-9-]{20}')->bind('password-reset-token');
+
+$app->match('/password-reset', 'controller\\auth::password_reset_request')
+	->bind('password_reset_request');
+$app->match('/password-reset/{token}', 'controller\\auth::password_reset')
+	->assert('token', '[a-z0-9-]{20}')->bind('password_reset');
 
 $app->get('/terms', 'controller\\page::terms')->bind('terms');
 

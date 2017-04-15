@@ -3,6 +3,7 @@
 namespace controller;
 
 use util\app;
+use util\user;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -41,10 +42,6 @@ class auth
 		if ($form->isValid())
 		{
 			$data = $form->getData();
-
-
-
-
 
 			return $app->redirect('edit');
 		}
@@ -94,23 +91,34 @@ class auth
 		{
 			$data = $form->getData();
 
-			$data['subject'] = 'mail_register_confirm.subject';
-			$data['template'] = 'register_confirm';
-			$data['to'] = $data['email'] = strtolower($data['email']);
+			$user = $app['xdb']->get('user_auth_' . $data['email']);
 
-			$token = $app['token']->set_length(20)->gen();
+			if ($user === '{}')
+			{
+				$data['subject'] = 'mail_register_confirm.subject';
+				$data['top'] = 'mail_register_confirm.top';
+				$data['bottom'] = 'mail_register_confirm.bottom';
+				$data['template'] = 'link';
+				$data['to'] = $data['email'] = strtolower($data['email']);
 
-			$data['url'] = $app->url('register_confirm', ['token' => $token]);
-			$data['token'] = $token;
+				$token = $app['token']->set_length(20)->gen();
 
-			$redis_key = 'register_confirm_' . $token;
-			$app['predis']->set($redis_key, json_encode($data));
-			$app['predis']->expire($redis_key, 14400);
+				$data['url'] = $app->url('register_confirm', ['token' => $token]);
+				$data['token'] = $token;
 
-			$app['mail']->queue_priority($data);
+				$redis_key = 'register_confirm_' . $token;
+				$app['predis']->set($redis_key, json_encode($data));
+				$app['predis']->expire($redis_key, 14400);
 
-			$app['session']->getFlashBag()->add('success', $app->trans('register.success'));
-			return $app->redirect('login');
+				$app['mail']->queue_priority($data);
+
+				return $app['twig']->render('page/panel_info.html.twig', [
+					'subject'	=> 'register.confirmation_email.subject',
+					'text'		=> 'register.confirmation_email.text',
+				]);
+			}
+
+			$app['session']->getFlashBag()->add('error', $app->trans('register.email_already_registered'));
 		}
 
 		return $app['twig']->render('auth/register.html.twig', ['form' => $form->createView()]);
@@ -135,9 +143,11 @@ class auth
 
 		$data = json_decode($data, true);
 
-		$count = $app['xdb']->search(['email' => $data['email'], 'type' => 'user']);
+		$email = strtolower($data['email']);
 
-		if ($count)
+		$user = $app['xdb']->get('user_auth_' . $email);
+
+		if ($user !== '{}')
 		{
 			return $app['twig']->render('page/panel_danger.html.twig', [
 				'subject'	=> 'register_confirm.already_done.subject',
@@ -147,15 +157,27 @@ class auth
 
 		do
 		{
-			$id = $app['uuid']->gen();
-			$exists = $app['xdb']->exists($id);
+			$uuid = $app['uuid']->gen();
+			$exists = $app['xdb']->exists($uuid);
 		}
 		while ($exists);
 
-		$data['uuid'] = $id;
-		$data['type'] = 'user';
+		$password = $data['password'];
 
-		$app['xdb']->set('user_' . $id, $data);
+		$user = new user('', '', '', []);
+		$password = $app->encodePassword($user, $password);
+
+		$app['xdb']->set('user_auth_' . $email, [
+			'type'		=> 'user_auth',
+			'uuid'		=> $uuid,
+			'password'	=> $password,
+			'roles'		=> ['ROLE_USER'],
+		]);
+
+		$app['xdb']->set('user_' . $uuid, [
+			'email' => $email,
+			'type' => 'user',
+		]);
 
 		$app['predis']->del($redis_key);
 
@@ -169,7 +191,7 @@ class auth
 	 *
 	 */
 
-	public function password_reset(Request $request, app $app)
+	public function password_reset_request(Request $request, app $app)
 	{
 		$data = [
 			'email'	=> '',
@@ -188,12 +210,37 @@ class auth
 		{
 			$data = $form->getData();
 
-			$email = strtolower($data['email']);
+			$data['email'] = strtolower($data['email']);
 
+			$user_auth = $app['xdb']->get('user_auth_' . $data['email']);
 
+			if ($user_auth !== '{}')
+			{
+				$data['subject'] = 'mail_password_reset.subject';
+				$data['top'] = 'mail_password_reset.top';
+				$data['bottom'] = 'mail_password_reset.bottom';
+				$data['template'] = 'link';
+				$data['to'] = $data['email'];
 
+				$token = $app['token']->set_length(20)->gen();
 
-			return $app->redirect('/edit');
+				$data['url'] = $app->url('password_reset', ['token' => $token]);
+				$data['token'] = $token;
+
+				$redis_key = 'password_reset_' . $token;
+				$app['predis']->set($redis_key, json_encode($data));
+				$app['predis']->expire($redis_key, 14400);
+
+				$app['mail']->queue_priority($data);
+
+				return $app['twig']->render('page/panel_info.html.twig', [
+					'subject'	=> 'password_reset.email_sent.subject',
+					'text'		=> 'password_reset.email_sent.text',
+				]);
+
+			}
+
+			$app['session']->getFlashBag()->add('error', $app->trans('password_reset.unknown_email_address'));
 		}
 
 		return $app['twig']->render('auth/password_reset.html.twig', ['form' => $form->createView()]);
@@ -203,19 +250,108 @@ class auth
 	 *
 	 */
 
-	public function password_reset_token(Request $request, app $app, $token)
+	public function password_reset(Request $request, app $app, $token)
 	{
+		$redis_key = 'password_reset_' . $token;
+		$data = $app['predis']->get($redis_key);
+
+		if (!$data)
+		{
+			return $app['twig']->render('page/panel_danger.html.twig', [
+				'subject'	=> 'new_password.not_found.subject',
+				'text'		=> 'new_password.not_found.text',
+			]);
+		}
+
+		$data = json_decode($data, true);
+
+		$email = strtolower($data['email']);
+
+		$user_auth = $app['xdb']->get('user_auth_' . $email);
+
+		if ($user_auth === '{}')
+		{
+			return $app['twig']->render('page/panel_danger.html.twig', [
+				'subject'	=> 'new_password.unknown_email.subject',
+				'text'		=> 'new_password.unknown_email.text',
+			]);
+		}
+
+		$form_data = [
+			'password'		=> '',
+		];
+
+		$form = $app->form($form_data)
+			->add('password', PasswordType::class, [
+				'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 6])],
+			])
+			->add('submit', SubmitType::class)
+			->getForm();
+
+		$form->handleRequest($request);
+
+		if ($form->isValid())
+		{
+			$user_auth = json_decode($user_auth, true);
+
+			$form_data = $form->getData();
+
+			$user = new user('', '', '', []);
+			$user_auth['password'] = $app->encodePassword($user, $form_data['password']);
+
+			$app['xdb']->set('user_auth_' . $email, $user_auth);
+			$app['predis']->del($redis_key);
 
 
-		return $app['twig']->render('alert.html.twig', ['form' => $form->createView()]);
+			$app['session']->getFlashBag()->add('success', $app->trans('password_reset.success'));
+
+			return $app->redirect($app->path('login'));
+		}
+
+		return $app['twig']->render('auth/new_password.html.twig', ['form' => $form->createView()]);
 	}
 
 	/**
 	 *
 	 */
 
-	public function new_password(Request $request, app $app)
+	public function password_reset_success(Request $request, app $app)
 	{
+
+	}
+
+	/**
+	 *
+	 */
+
+	public function _new_password(Request $request, app $app, $token)
+	{
+		$redis_key = 'password_reset_' . $token;
+		$data = $app['predis']->get($redis_key);
+
+		if (!$data)
+		{
+			return $app['twig']->render('page/panel_danger.html.twig', [
+				'subject'	=> 'new_password.not_found.subject',
+				'text'		=> 'new_password.not_found.text',
+			]);
+		}
+
+		$data = json_decode($data, true);
+
+		$email = strtolower($data['email']);
+
+		$user = $app['xdb']->get('user_auth_' . $email);
+
+		if ($user === '{}')
+		{
+			return $app['twig']->render('page/panel_danger.html.twig', [
+				'subject'	=> 'register_confirm.not_found.subject',
+				'text'		=> 'register_confirm.not_found.text',
+			]);
+
+		}
+
 		$data = [
 			'password'	=> '',
 		];

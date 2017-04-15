@@ -8,38 +8,12 @@ $app['debug'] = getenv('DEBUG');
 
 $app['route_class'] = 'util\route';
 
-/*
-$app['predis'] = function () {
-	try
-	{
-		$url = getenv('REDIS_URL');
-		$con = parse_url($url);
-
-		if (isset($con['pass']))
-		{
-			$con['password'] = $con['pass'];
-		}
-
-		$con['scheme'] = 'tcp';
-
-		return new Predis\Client($con);
-	}
-	catch (Exception $e)
-	{
-		echo 'Couldn\'t connected to Redis: ';
-		echo $e->getMessage();
-		exit;
-	}
-};
-*/
-
 $app->register(new Predis\Silex\ClientServiceProvider(), [
 	'predis.parameters' => getenv('REDIS_URL'),
 	'predis.options'    => [
 		'prefix'  => 'omv_',
 	],
 ]);
-
 
 $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => [
@@ -67,6 +41,11 @@ $app->extend('twig', function($twig, $app) {
 $app->register(new Silex\Provider\SecurityServiceProvider(), [
 
 	'security.firewalls' => [
+
+		'unsecured'	=> [
+			'anonymous'	=> true,
+		],
+
 		'admin' 	=> [
 			'pattern' 	=> '^/admin',
 			'http'		=> true,
@@ -74,9 +53,13 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), [
 				'admin' 	=> ['ROLE_ADMIN', getenv('ADMIN_PASSWORD')],
 			],
 		],
-		'editor'	=> [
-			'pattern'	=> '^/edit',
-			'users'		=> [],
+
+		'secured'	=> [
+			'pattern'	=> '^/s/',
+
+			'users'		=> function () use ($app) {
+				return new util\user_provider($app['xdb']);
+			},
 
 		],
 	],
@@ -182,7 +165,7 @@ $app->error(function (\Exception $e, Symfony\Component\HttpFoundation\Request $r
 
 	switch ($code) {
 		case 404:
-			$message = '400. The requested page could not be found.';
+			$message = '404. The requested page could not be found.';
 			break;
 		default:
 			$message =  $code . '. We are sorry, but something went wrong.';

@@ -14,7 +14,7 @@ use Monolog\Logger;
  id          | character varying(255)      | not null
  version     | integer                     | not null
  data        | jsonb                       |
- ip          | character varying(255)      |
+ ip          | character varying(60)       |
 Indexes:
     "events_pkey" PRIMARY KEY, btree (id, version)
 
@@ -91,11 +91,6 @@ class xdb
 			$this->db->insert('xdb.events', $insert);
 
 			$this->redis->set('xdb_' . $id, $json);
-
-			$key = 'xdb_' . $version . '_' . $id;
-
-			$this->redis->set($key, $json);
-			$this->redis->expire($key, 86400);
 		}
 		catch(Exception $e)
 		{
@@ -106,7 +101,7 @@ class xdb
 	}
 
 	/*
-	 *
+	 * @return string (json format)
 	 */
 
 	public function get(string $id, int $version = 0)
@@ -140,31 +135,14 @@ class xdb
 			}
 		}
 
-		$key = 'xdb_' . $version . '_' . $id;
-
-		$json = $this->redis->get($key);
-
-		if ($json)
-		{
-			return $json;
-		}
-
 		$json = $this->db->fetchColumn('select e1.data from xdb.events e1
 			where e1.id = ? and e1.version = ?', [$id, $version]);
-
-		if ($json)
-		{
-			$this->redis->set($key, $json);
-			$this->redis->expire($key, 86400);
-
-			return $json;
-		}
 
 		return '{}';
 	}
 
 	/**
-	 *
+	 * @return boolean
 	 */
 
 	public function exists(string $id)
@@ -190,9 +168,9 @@ class xdb
 	}
 
 	/*
-	 *
+	 * @return array (ids)
 	 */
-
+/*
 	public function search(array $ary)
 	{
 		$sql_where = [];
@@ -223,5 +201,32 @@ class xdb
 
 		return $ids;
 	}
+*/
+
+	/*
+	 * @return array
+	 */
+/*
+	public function get_by(array $ary)
+	{
+		$sql_where = [];
+		$sql_param = [];
+
+		foreach ($ary as $key => $val)
+		{
+			$sql_where[] = ' data->>\'' . $key . '\' = ? ';
+			$sql_param[] = $val;
+		}
+
+		$sql_where = count($sql_where) ? ' and ' . implode(' and ', $sql_where) : '';
+
+		$fetch = $this->db->fetchAssoc('select e1.data from xdb.events e1
+			where e1.version =
+				(select max(e2.version) from xdb.events e2
+					where e1.id = e2.id)' . $sql_where, $sql_param);
+
+		return $fetch;
+	}
+*/
 }
 

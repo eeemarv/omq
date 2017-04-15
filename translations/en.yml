@@ -34,6 +34,19 @@ password_reset:
   heading: Password reset
   email: Email
   submit_btn: Send
+  email_sent:
+    subject: Password reset link sent
+    text: >
+      Open your mailbox and click on the link we've sent
+      to you in order to set a new password.
+  unknown_email_address: This email address is not registered.
+  success: >
+    Your password has been reset. You can login now with the new password.
+
+mail_password_reset:
+  subject: Reset password
+  top: Use this link to set a new password for your account.
+  bottom: If you didn't request to reset your password, please ignore this mail.
 
 new_password:
   title: Set a new password
@@ -59,7 +72,12 @@ register:
   generate_btn: Generate
   accept: I accept the <a href="%url%">terms and conditions.</a>
   submit_btn: Register
-  success: Check your email
+  email_already_registered: There is already an account with this email address.
+  confirmation_email:
+    subject: Confirmation email
+    text: >
+      Open your mailbox and click on the confirmation link we've sent
+      to you in order to complete your registration.
 
 register_confirm:
   already_done:
