@@ -31,9 +31,11 @@ class auth
 			->add('email', EmailType::class, [
 				'constraints' => new Assert\Email(),
 			])
+
 			->add('password', PasswordType::class, [
 				'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 6])],
 			])
+
 			->add('submit', SubmitType::class)
 			->getForm();
 
@@ -64,24 +66,25 @@ class auth
 
 		$form = $app->form($data)
 
-/*
 			->add('username', TextType::class, [
 				'constraints'	=> [
 					new Assert\Length(['min' => 2, 'max' => 6]),
-					new Assert\Regex('[a-z0-9-]'),
-				]
+					new Assert\Regex('/^[a-z0-9][a-z0-9-]*[a-z0-9]$/'),
+				],
  			])
- */
 
 			->add('email', EmailType::class, [
 				'constraints' => new Assert\Email(),
 			])
+
 			->add('password', PasswordType::class, [
 				'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 6])],
 			])
+
 			->add('accept', CheckboxType::class, [
 				'constraints' => new Assert\IsTrue(),
 			])
+
 			->add('submit', SubmitType::class)
 			->getForm();
 
@@ -91,9 +94,18 @@ class auth
 		{
 			$data = $form->getData();
 
-			$user = $app['xdb']->get('user_auth_' . $data['email']);
+			$user_email = $app['xdb']->get('user_email_' . $data['email']);
+			$user_username = $app['xdb']->get('username_' . $data['username']);
 
-			if ($user === '{}')
+			if ($user_username !== '{}')
+			{
+				$app['session']->getFlashBag()->add('error', $app->trans('register.username_already_registered'));
+			}
+			else if ($user_email !== '{}')
+			{
+				$app['session']->getFlashBag()->add('error', $app->trans('register.email_already_registered'));
+			}
+			else
 			{
 				$data['subject'] = 'mail_register_confirm.subject';
 				$data['top'] = 'mail_register_confirm.top';
@@ -112,16 +124,23 @@ class auth
 
 				$app['mail']->queue_priority($data);
 
-				return $app['twig']->render('page/panel_info.html.twig', [
-					'subject'	=> 'register.confirmation_email.subject',
-					'text'		=> 'register.confirmation_email.text',
-				]);
+				return $app->redirect($app->path('register_email_sent'));
 			}
-
-			$app['session']->getFlashBag()->add('error', $app->trans('register.email_already_registered'));
 		}
 
 		return $app['twig']->render('auth/register.html.twig', ['form' => $form->createView()]);
+	}
+
+	/**
+	 *
+	 */
+
+	public function register_email_sent(Request $request, app $app)
+	{
+		return $app['twig']->render('page/panel_info.html.twig', [
+			'subject'	=> 'register_email_sent.subject',
+			'text'		=> 'register_email_sent.text',
+		]);
 	}
 
 	/**
@@ -145,13 +164,25 @@ class auth
 
 		$email = strtolower($data['email']);
 
-		$user = $app['xdb']->get('user_auth_' . $email);
+		$user_email = $app['xdb']->get('user_email_' . $email);
 
-		if ($user !== '{}')
+		if ($user_email !== '{}')
 		{
 			return $app['twig']->render('page/panel_danger.html.twig', [
-				'subject'	=> 'register_confirm.already_done.subject',
-				'text'		=> 'register_confirm.already_done.text',
+				'subject'	=> 'register_confirm.email_already_exists.subject',
+				'text'		=> 'register_confirm.email_already_exists.text',
+			]);
+		}
+
+		$username = strtolower($data['username']);
+
+		$user_username = $app['xdb']->get('username_' . $username);
+
+		if ($user_username !== '{}')
+		{
+			return $app['twig']->render('page/panel_danger.html.twig', [
+				'subject'	=> 'register_confirm.username_already_exists.subject',
+				'text'		=> 'register_confirm.username_already_exists.text',
 			]);
 		}
 
@@ -162,21 +193,25 @@ class auth
 		}
 		while ($exists);
 
+
 		$password = $data['password'];
 
 		$user = new user('', '', '', []);
 		$password = $app->encodePassword($user, $password);
 
-		$app['xdb']->set('user_auth_' . $email, [
-			'type'		=> 'user_auth',
-			'uuid'		=> $uuid,
-			'password'	=> $password,
+		$app['xdb']->set('user_' . $uuid, [
+			'email' 	=> $email,
+			'username'	=> $username,
 			'roles'		=> ['ROLE_USER'],
+			'password'	=> $password,
 		]);
 
-		$app['xdb']->set('user_' . $uuid, [
-			'email' => $email,
-			'type' => 'user',
+		$app['xdb']->set('user_email_' . $email, [
+			'uuid'		=> $uuid,
+		]);
+
+		$app['xdb']->set('username_' . $username, [
+			'uuid' 	=> $uuid,
 		]);
 
 		$app['predis']->del($redis_key);
@@ -201,6 +236,7 @@ class auth
 			->add('email', EmailType::class, [
 				'constraints' => new Assert\Email(),
 			])
+
 			->add('submit', SubmitType::class)
 			->getForm();
 

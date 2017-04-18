@@ -66,6 +66,22 @@ This address should be set up for DKIM in the mailserver.
 
 ## Usage
 
-... info will come soon
+### cli
+
+Commands can be run in the root of the repository with `php cmd <your-command>`
+
+To discover all CLI commands, do `php cmd -h`
+
+To make `cmd` executeable without the need for `php`, do `chmod +x cli`. Then you can run commands like `./cmd <the command>`
+
+To create an admin user:
+
+```shell
+php cmd user:create --username=your-username --password=your-password --role=admin --email=your@mail-address.net
+```
+
+### web
+
+... more info soon
 
 

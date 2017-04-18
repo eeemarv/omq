@@ -46,6 +46,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), [
 			'anonymous'	=> true,
 		],
 
+/*
 		'admin' 	=> [
 			'pattern' 	=> '^/admin',
 			'http'		=> true,
@@ -53,7 +54,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), [
 				'admin' 	=> ['ROLE_ADMIN', getenv('ADMIN_PASSWORD')],
 			],
 		],
-
+*/
 		'secured'	=> [
 			'pattern'	=> '^/s/',
 
@@ -68,6 +69,12 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), [
 		'ROLE_ADMIN' => ['ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'],
 	],
 
+]);
+
+$app->register(new Knp\Provider\ConsoleServiceProvider(), [
+    'console.name'              => 'omv',
+    'console.version'           => '01',
+    'console.project_directory' => __DIR__,
 ]);
 
 $app->register(new Silex\Provider\FormServiceProvider());

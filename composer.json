@@ -35,7 +35,8 @@
 		"symfony/monolog-bridge": "^3.2",
 		"symfony/console": "^3.2",
 		"symfony/process": "^3.2",
-		"predis/service-provider": "^2.0"
+		"predis/service-provider": "^2.0",
+		"knplabs/console-service-provider": "^2.0"
 	},
 
     "minimum-stability": "stable",
@@ -44,7 +45,8 @@
 		"psr-4": {
 			"controller\\": "controller/",
 			"service\\": "service/",
-			"util\\": "util/"
+			"util\\": "util/",
+			"command\\": "command/"
         }
     }
 }

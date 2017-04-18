@@ -33,6 +33,8 @@ $app->get('/business', function (Request $request, app $app)
 $app->match('/login', 'controller\\auth::login')->bind('login');
 
 $app->match('/register', 'controller\\auth::register')->bind('register');
+$app->get('/register-email-sent', 'controller\\auth::register_email_sent')
+	->bind('register_email_sent');
 $app->get('/register/{token}', 'controller\\auth::register_confirm')
 	->assert('token', '[a-z0-9-]{20}')->bind('register_confirm');
 

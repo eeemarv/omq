@@ -75,7 +75,6 @@ class xdb
 		$version = $version ? $version + 1 : 1;
 
 		$data['version'] = $version;
-		$data['id'] = $id;
 
 		$json = json_encode($data);
 

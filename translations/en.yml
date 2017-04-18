@@ -72,17 +72,22 @@ register:
   generate_btn: Generate
   accept: I accept the <a href="%url%">terms and conditions.</a>
   submit_btn: Register
+  username_already_registered: There is already an account with this username.
   email_already_registered: There is already an account with this email address.
-  confirmation_email:
-    subject: Confirmation email
-    text: >
-      Open your mailbox and click on the confirmation link we've sent
-      to you in order to complete your registration.
+
+register_email_sent:
+  subject: Confirmation email
+  text: >
+    Open your mailbox and click on the confirmation link we've sent
+    to you in order to complete your registration.
 
 register_confirm:
-  already_done:
-    subject: Registration was already completed.
-    text: You have already an account with this email address.
+  email_already_exists:
+    subject: Registration already done.
+    text: The registration with this email address has already completed.
+  username_already_exists:
+    subject: Registration already done.
+    text: The registration with this username has already completed.
   not_found:
     subject: Token not found
     text: The token for registration is not valid anymore. Please try to register again.
@@ -94,9 +99,6 @@ mail_register_confirm:
   subject: Confirm your registration
   top: Please confirm your registration by clicking on the link below.
   bottom: If you didn't register at omdev, please ignore this mail.
-
-
-
 
 terms:
   heading: Terms and Conditions
