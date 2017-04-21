@@ -20,7 +20,7 @@ $mailer->registerPlugin(new \Swift_Plugins_AntiFloodPlugin(100, 30));
 $mailer->getTransport()->stop();
 
 $app['xdb']->set('stat', 'boot', []);
-$boot = json_decode($app['xdb']->get('boot'), true)['version'];
+$boot = $app['xdb']->get('stat', 'boot')['version'];
 
 $app['monolog']->debug('mail service started .. ' . $boot);
 
@@ -28,7 +28,7 @@ $loop_count = 1;
 
 $domain = getenv('DOMAIN');
 
-$from_noreply_address = getenv('MAIL_NOREPLY_ADDRESS');
+$from_noreply_address = getenv('MAIL_ADDRESS_NOREPLY');
 
 $app->boot();
 

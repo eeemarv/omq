@@ -11,7 +11,7 @@ $app['route_class'] = 'util\route';
 $app->register(new Predis\Silex\ClientServiceProvider(), [
 	'predis.parameters' => getenv('REDIS_URL'),
 	'predis.options'    => [
-		'prefix'  => 'omv_',
+		'prefix'  => 'omq_',
 	],
 ]);
 
@@ -34,7 +34,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
 
 $app->extend('twig', function($twig, $app) {
     $twig->addGlobal('s3_img', getenv('S3_IMG'));
-    $twig->addGlobal('projects', $app['xdb']->get('projects'));
+/*    $twig->addGlobal('projects', $app['xdb']->get('projects')); */
     return $twig;
 });
 
@@ -105,6 +105,7 @@ $app->register(new Silex\Provider\AssetServiceProvider(), [
 $app->register(new Silex\Provider\LocaleServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale_fallbacks' => ['nl', 'en'],
+    'locale'			=> 'nl',
 ));
 
 use Symfony\Component\Translation\Loader\YamlFileLoader;

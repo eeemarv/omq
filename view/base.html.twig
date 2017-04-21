@@ -18,7 +18,7 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">{{ 'navbar.brand'|trans }}</a>
+      <a class="navbar-brand" href="{{ path('index') }}">{{ 'navbar.brand'|trans }}</a>
 {#   <a class="btn btn-default navbar-btn" href="{{ path('login') }}"><i class="fa fa-sign-in"></i> Sign in</a> #}
 {#   <a class="btn btn-default navbar-btn"><i class="fa fa-user"></i></a> #}
 
@@ -27,9 +27,10 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
  {#        <li><a href="{{ path('what') }}">{{ 'navbar.what'|trans }}</a></li>
-        <li><a href="{{ path('business') }}">{{ 'navbar.business'|trans }}</a></li> #}
+        <li><a href="{{ path('business') }}">{{ 'navbar.business'|trans }}</a></li>
         <li><a href="{{ path('login') }}">{{ 'navbar.login'|trans }}</a></li>
-        <li><a href="{{ path('register') }}">{{ 'navbar.register'|trans }}</a></li>
+        <li><a href="{{ path('register') }}">{{ 'navbar.register'|trans }}</a></li> #}
+        <li><a href="{{ path('contact') }}">{{ 'navbar.contact'|trans }}</a></li>
       </ul>
     </div>
 
@@ -51,7 +52,7 @@
 <div class="alert alert-danger alert-dismissible" role="alert">
 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 <span aria-hidden="true">&times;</span></button>
-{{ alert }}
+{{ alert|raw }}
 </div></div></div>
 
 {% endfor %}
@@ -63,7 +64,7 @@
 <div class="alert alert-success alert-dismissible" role="alert">
 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 <span aria-hidden="true">&times;</span></button>
-{{ alert }}
+{{ alert|raw }}
 </div></div></div>
 
 {% endfor %}
@@ -75,7 +76,19 @@
 <div class="alert alert-danger alert-dismissible" role="alert">
 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 <span aria-hidden="true">&times;</span></button>
-{{ alert }}
+{{ alert|raw }}
+</div></div></div>
+
+{% endfor %}
+
+{% for alert in app.session.flashbag.get('info') %}
+
+<div class="row">
+<div class="col-xs-12">
+<div class="alert alert-info alert-dismissible" role="alert">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">&times;</span></button>
+{{ alert|raw }}
 </div></div></div>
 
 {% endfor %}

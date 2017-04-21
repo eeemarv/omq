@@ -8,6 +8,7 @@ $app = require_once __DIR__ . '/../app.php';
 
 //
 
+/*
 $app->get('/vote', function (Request $request) use ($app)
 {
     return $app['twig']->render('vote.html.twig', []);
@@ -75,6 +76,15 @@ $app->match('/admin', 'controller\\admin::settings');
 $app->match('/admin/editor/{id}', 'controller\\admin::editor')->assert('id', '\d+');
 
 $app->match('/pay', 'controller\\pay::pay')->bind('pay');
-$app->match('/', 'controller\\pay::pay')->bind('pay');
+*
+*/
+
+$app->match('/contact', 'controller\\contact::contact')->bind('contact');
+$app->get('/contact-confirm/{token}', 'controller\\contact::contact_confirm')->bind('contact_confirm');
+
+$app->get('/', function (Request $request, app $app)
+{
+    return $app['twig']->render('index.html.twig', []);
+})->bind('index');
 
 $app->run();

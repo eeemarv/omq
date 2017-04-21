@@ -19,6 +19,7 @@ navbar:
   home: Home
   login: Login
   register: Register
+  contact: Contact
 
 login:
   title: Login

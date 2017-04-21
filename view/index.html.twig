@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block heading %}
+{#
+<div class="jumbotron">
+<h1>{{ 'index.title'|trans }}</h1>
+</div>
+#}
+{% endblock heading %}
+
+{% block content %}
+
+<div class="col-md-12">
+
+{{ 'index.content'|trans|raw }}
+
+</div>
+
+{% endblock content %}
+
