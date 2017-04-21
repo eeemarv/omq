@@ -7,22 +7,25 @@ use Predis\Client as Redis;
 use Monolog\Logger;
 
 /*
-                            Table "xdb.events"
-   Column    |            Type             |              Modifiers
--------------+-----------------------------+--------------------------------------
- ts          | timestamp without time zone | default timezone('utc'::text, now())
- id          | character varying(255)      | not null
- version     | integer                     | not null
- data        | jsonb                       |
- ip          | character varying(60)       |
+                              Table "xdb.events"
+ Column  |            Type             |              Modifiers
+---------+-----------------------------+--------------------------------------
+ ts      | timestamp without time zone | default timezone('utc'::text, now())
+ id      | character varying(255)      | not null
+ version | integer                     | not null
+ data    | jsonb                       |
+ ip      | character varying(60)       |
+ type    | character varying(60)       | not null
 Indexes:
-    "events_pkey" PRIMARY KEY, btree (id, version)
+    "events_pkey" PRIMARY KEY, btree (id, type, version)
+
 
 SQL:
 
 create table if not exists xdb.events (
 	ts timestamp without time zone default timezone('utc'::text, now()),
 	id varchar(255),
+	type varchar(60),
 	version int,
 	data jsonb,
 	ip varchar(60)
@@ -66,11 +69,11 @@ class xdb
 	 *
 	 */
 
-	public function set(string $id, array $data)
+	public function set(string $type, string $id, array $data)
 	{
 		$version = $this->db->fetchColumn('select max(version)
 			from xdb.events
-			where id = ?', [$id]);
+			where type = ? and id = ?', [$type, $id]);
 
 		$version = $version ? $version + 1 : 1;
 
@@ -81,6 +84,7 @@ class xdb
 		$insert = [
 			'id'			=> $id,
 			'version'		=> $version,
+			'type'			=> $type,
 			'data'			=> $json,
 			'ip'			=> $this->ip,
 		];
@@ -89,11 +93,11 @@ class xdb
 		{
 			$this->db->insert('xdb.events', $insert);
 
-			$this->redis->set('xdb_' . $id, $json);
+			$this->redis->set('xdb_' . $type . '_' . $id, $json);
 		}
 		catch(Exception $e)
 		{
-			$this->monolog->error('Database xdb: ' . $e->getMessage());
+			$this->monolog->error('xdb: ' . $e->getMessage());
 			throw $e;
 			exit;
 		}
@@ -103,12 +107,12 @@ class xdb
 	 * @return string (json format)
 	 */
 
-	public function get(string $id, int $version = 0)
+	public function get_json(string $type, string $id, int $version = 0)
 	{
 
 		if ($version === 0)
 		{
-			$key = 'xdb_' . $id;
+			$key = 'xdb_' . $type . '_' . $id;
 
 			$json = $this->redis->get($key);
 
@@ -118,9 +122,11 @@ class xdb
 			}
 
 			$json = $this->db->fetchColumn('select e1.data from xdb.events e1
-				where e1.id = ? and e1.version =
+				where e1.type = ?
+					and e1.id = ?
+					and e1.version =
 					(select max(e2.version) from xdb.events e2
-						where e1.id = e2.id)', [$id]);
+						where e1.id = e2.id and e1.type = e2.type)', [$type, $id]);
 
 			if ($json)
 			{
@@ -140,13 +146,22 @@ class xdb
 		return '{}';
 	}
 
+	/*
+	 * @return array
+	 */
+
+	public function get(string $type, string $id, int $version = 0)
+	{
+		return json_decode($this->get_json($type, $id, $version), true);
+	}
+
 	/**
 	 * @return boolean
 	 */
 
-	public function exists(string $id)
+	public function exists(string $type, string $id)
 	{
-		$key = 'xdb_' . $id;
+		$key = 'xdb_' . $type . '_' . $id;
 
 		$json = $this->redis->get($key);
 
@@ -156,7 +171,7 @@ class xdb
 		}
 
 		$id = $this->db->fetchColumn('select id from xdb.events e1
-			where e1.id = ?', [$id]);
+			where e1.type = ? and e1.id = ?', [$type, $id]);
 
 		if ($id)
 		{
@@ -169,11 +184,11 @@ class xdb
 	/*
 	 * @return array (ids)
 	 */
-/*
-	public function search(array $ary)
+
+	public function search(string $type, array $ary)
 	{
-		$sql_where = [];
-		$sql_param = [];
+		$sql_where = ['type = ?'];
+		$sql_param = [$type];
 
 		foreach ($ary as $key => $val)
 		{
@@ -200,7 +215,7 @@ class xdb
 
 		return $ids;
 	}
-*/
+
 
 	/*
 	 * @return array

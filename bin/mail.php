@@ -19,7 +19,7 @@ $mailer->registerPlugin(new \Swift_Plugins_AntiFloodPlugin(100, 30));
 
 $mailer->getTransport()->stop();
 
-$app['xdb']->set('boot', []);
+$app['xdb']->set('stat', 'boot', []);
 $boot = json_decode($app['xdb']->get('boot'), true)['version'];
 
 $app['monolog']->debug('mail service started .. ' . $boot);

@@ -34,14 +34,15 @@ password_reset:
   heading: Password reset
   email: Email
   submit_btn: Send
-  email_sent:
-    subject: Password reset link sent
-    text: >
-      Open your mailbox and click on the link we've sent
-      to you in order to set a new password.
   unknown_email_address: This email address is not registered.
   success: >
     Your password has been reset. You can login now with the new password.
+
+password_reset_sent:
+  subject: Password reset link sent
+  text: >
+    Open your mailbox and click on the link we've sent
+    to you in order to set a new password.
 
 mail_password_reset:
   subject: Reset password
@@ -62,7 +63,8 @@ register:
   heading: Register
   username: Username
   username_explain: >
-    Maximum 6 lowercase alfanumeric characters. Hyphens between characters can also be used.
+    Maximum 6 lowercase alfanumeric characters.
+    Hyphens between characters can also be used.
   email: Email
   email_explain: >
     An email will be send to you to verify your address
@@ -72,8 +74,10 @@ register:
   generate_btn: Generate
   accept: I accept the <a href="%url%">terms and conditions.</a>
   submit_btn: Register
-  username_already_registered: There is already an account with this username.
-  email_already_registered: There is already an account with this email address.
+  username_already_registered: >
+    There is already an account with this username.
+  email_already_registered: >
+    There is already an account with this email address.
 
 register_email_sent:
   subject: Confirmation email
@@ -84,21 +88,25 @@ register_email_sent:
 register_confirm:
   email_already_exists:
     subject: Registration already done.
-    text: The registration with this email address has already completed.
+    text: >
+      The registration with this email address has already completed.
   username_already_exists:
     subject: Registration already done.
     text: The registration with this username has already completed.
   not_found:
     subject: Token not found
-    text: The token for registration is not valid anymore. Please try to register again.
+    text: >
+      The token for registration is not valid anymore. Please try to register again.
   success:
     subject: Registration completed
     text: You may now login with your password and email address.
 
 mail_register_confirm:
   subject: Confirm your registration
-  top: Please confirm your registration by clicking on the link below.
-  bottom: If you didn't register at omdev, please ignore this mail.
+  top: >
+    Please confirm your registration by clicking on the link below.
+  bottom: >
+    If you didn't register at omdev, please ignore this mail.
 
 terms:
   heading: Terms and Conditions
