@@ -18,6 +18,15 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
+
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+
       <a class="navbar-brand" href="{{ path('index') }}">{{ 'navbar.brand'|trans }}</a>
 {#   <a class="btn btn-default navbar-btn" href="{{ path('login') }}"><i class="fa fa-sign-in"></i> Sign in</a> #}
 {#   <a class="btn btn-default navbar-btn"><i class="fa fa-user"></i></a> #}
@@ -30,6 +39,7 @@
         <li><a href="{{ path('business') }}">{{ 'navbar.business'|trans }}</a></li>
         <li><a href="{{ path('login') }}">{{ 'navbar.login'|trans }}</a></li>
         <li><a href="{{ path('register') }}">{{ 'navbar.register'|trans }}</a></li> #}
+        <li><a href="{{ path('newsletter_subscribe') }}">{{ 'navbar.newsletter'|trans }}</a></li>
         <li><a href="{{ path('contact') }}">{{ 'navbar.contact'|trans }}</a></li>
       </ul>
     </div>
@@ -73,7 +83,7 @@
 
 <div class="row">
 <div class="col-xs-12">
-<div class="alert alert-danger alert-dismissible" role="alert">
+<div class="alert alert-warning alert-dismissible" role="alert">
 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 <span aria-hidden="true">&times;</span></button>
 {{ alert|raw }}

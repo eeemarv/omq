@@ -3,6 +3,8 @@ language: Nederlands
 
 title: Project lokale munt Antwerpen
 
+mail_from: Lokale munt Antwerpen
+
 error:
   404:
     heading: 404
@@ -20,6 +22,7 @@ navbar:
   login: Login
   register: Register
   contact: Contact
+  newsletter: Nieuwsbrief
 
 index:
   content: >
@@ -28,19 +31,19 @@ index:
     lokaal geld verbinden sociale projecten en bedrijven in een heilzame cyclus van wederzijds ondersteunen.
     Dit project is zo ontworpen dat alle opstartkosten gemakkelijk terug te winnen zijn. Het werkt
     het beste wanneer veel lokale bedrijven deelnemen. </p>
-    <img src="./assets/cw.jpg"/>
+    <img src="./assets/cw.jpg" class="img-responsive">
     <h3>Hoe het werkt</h3>
     <ul>
-    <li><strong>Bedrijven</strong> doneren lokaal geld, geen euros of produkten aan sociale projecten naar hun keuze.
+    <li><strong>Bedrijven</strong> doneren lokaal geld, geen euros of producten aan sociale projecten naar hun keuze.
     Zo nemen ze het op zich om gedeeltelijk (gewoonlijk tussen 15% en 50%) lokaal geld te accepteren
-    als betaling bij een verkoop.</li>
+    als betaling voor hun diensten en/of producten.</li>
     <li><strong>De sociale projecten</strong> spenderen het lokaal geld bij de deelnemende bedrijven en door
     lonen te verhogen en door onbetaalde overuren te vergoeden en vrijwilligers te vergoeden. Maar vooral
     interessant is het voor hen interessant om lokaal geld om te wisselen in euros.</li>
     <li><strong>Mensen</strong> steunen de projecten die ze willen door gewoon geld (euro) om te
     wisselen voor lokaal geld bij de sociale projecten. Ze kunnen het lokale geld vervolgens uitgeven
     bij de deelnemende winkels, restaurants enz.</li>
-    <li><strong>Bedrijven</strong> spenderen dan de verdiende (teruggewonnen) lokale geld bij andere
+    <li><strong>Bedrijven</strong> spenderen dan het verdiende (teruggewonnen) lokale geld bij andere
     deelnemende bedrijven, betalen bonussen aan personeel of doneren opnieuw aan de sociale projecten enz.
     Ze krijgen belastingskrediet op donaties en ze innen BTW op de gehele verkoopsom, net zoals bij
     het normale geld, de euro, het geval is.</li>
@@ -53,6 +56,9 @@ index:
     En door lokaal te winkelen kiezen ze voor de sociale projecten die ze willen ondersteunen. </p>
     <p><i>Dit lokaal geldsysteem heet the Community Way en werd ontworpen door Michael Linton die ook
     in de vroege jaren '80 het bekende LETSysteem creëerde.</i></p>
+    <hr>
+    <h4>Momenteel is de lokale munt nog niet van start gegaan. Schrijf je in op de nieuwsbrief om op de
+    hoogte te blijven van de meest recente ontwikkelingen. </h4>
 
 contact:
   explain: >
@@ -66,17 +72,59 @@ contact:
   confirm_email_sent: >
     <h2> bevestiging nodig </h2>
     <p> We hebben een email naar je gestuurd. Klik de link aan in deze mail om je
-    bericht te bevestigen en je bericht tot bij ons te krijgen.</p>
+    bericht te bevestigen en tot bij ons te krijgen.</p>
   success: >
     Je contact-bericht is succesvol verstuurd.
+  confirm_not_found: >
+    De bevestigingslink is reeds gebruikt of verlopen.
+    De link blijft één dag geldig. Indien je de link nog niet gebruikt had,
+    gelieve dan opnieuw je bericht in het contactformulier in te geven.
+  mail_subject: Omq bericht contactformulier
+
+mail_contact:
+  browser: Browser
 
 mail_contact_confirm:
   subject: Bevestig je contact-bericht
   top: Klik deze link aan om je bericht in het contactformulier te bevestigen
   bottom: >
-    Als je het contactformulier van "Lokaal geld Antwerpen" (https://omq.be) niet zelf hebt ingevuld,
+    Als je het contactformulier van "Lokale munt Antwerpen" (https://omq.be) niet zelf hebt ingevuld,
     gelieve dan deze mail te negeren.
 
+newsletter_subscribe:
+  explain: >
+    Ontvang onze nieuwsbrief en blijf op de hoogte van de lancering van de Antwerpse lokale munt.
+    We gebruiken je email adres voor geen ander doel dan onze nieuwsbrief. We sturen je maximaal
+    éénmaal per maand een mail. Elke nieuwsbrief bevat een link om je weer uit te schrijven.
+  heading: Nieuwsbrief
+  submit_btn: Ontvang de nieuwsbrief
+  email: Email
+  message: Je bericht
+  email_explain: >
+    Er wordt een email met bevestigingslink naar je gestuurd.
+  confirm_email_sent: >
+    <h2> bevestiging nodig </h2>
+    <p> We hebben een email naar je gestuurd. Klik de link aan in deze mail om je inschrijving op de
+    nieuwsbrief te voltooien.</p>
+  success: >
+    Je bent nu geabonneerd op onze nieuwsbrief.
+  confirm_not_found: >
+    De bevestigingslink is reeds gebruikt of verlopen.
+    De link blijft één dag geldig. Indien je de link nog niet gebruikt had,
+    gelieve dan opnieuw de nieuwsbrief aan te vragen.
+  already: >
+    Je was reeds op onze nieuwsbrief ingeschreven.
+
+mail_newsletter_subscribe_notify:
+  subject: Omq inschrijving nieuwsbrief
+  browser: Browser
+
+mail_newsletter_subscribe_confirm:
+  subject: Bevestig je inschrijving op de nieuwsbrief
+  top: Klik deze link aan om je inschrijving te bevestigen
+  bottom: >
+    Als je niet zelf een verzoek voor de nieuwsbrief van "Lokale munt Antwerpen" (https://omq.be)
+    hebt ingediend, gelieve dan deze mail te negeren.
 
 login:
   title: Login

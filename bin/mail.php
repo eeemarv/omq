@@ -90,7 +90,17 @@ while (true)
 		->setBody($text)
 		->addPart($html, 'text/html')
 		->setTo($to)
-		->setFrom($from_noreply_address);
+		->setFrom([$from_noreply_address => $app->trans('mail_from')]);
+
+	if (isset($mail_ary['reply_to']))
+	{
+		$message->setReplyTo($mail_ary['reply_to']);
+	}
+
+	if (isset($mail_ary['cc']))
+	{
+		$message->setCc($mail_ary['cc']);
+	}
 
 	if ($mailer->send($message, $failed_recipients))
 	{

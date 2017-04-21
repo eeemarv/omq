@@ -1,0 +1,14 @@
+{% extends 'mail/base.html.twig' %}
+
+{% block content %}
+
+<p>{{ email }} subscribed</p>
+
+<hr/>
+
+<p>{{ 'mail_newsletter_subscribe_notify.browser'|trans }}: {{ browser }}</p>
+<p>ip: {{ ip }}</p>
+
+
+{% endblock %}
+

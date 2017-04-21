@@ -31,7 +31,7 @@ create table if not exists xdb.events (
 	ip varchar(60)
 );
 
-alter table xdb.events add primary key (id, version);
+alter table xdb.events add primary key (id, version, type);
 */
 
 class xdb

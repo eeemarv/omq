@@ -1,0 +1,14 @@
+{% extends 'mail/base.html.twig' %}
+
+{% block content %}
+
+<p>{{ message }}</p>
+
+<hr/>
+
+<p>{{ 'mail_contact.browser'|trans }}: {{ browser }}</p>
+<p>ip: {{ ip }}</p>
+
+
+{% endblock %}
+
