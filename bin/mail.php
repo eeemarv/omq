@@ -26,8 +26,6 @@ $app['monolog']->debug('mail service started .. ' . $boot);
 
 $loop_count = 1;
 
-$domain = getenv('DOMAIN');
-
 $from_noreply_address = getenv('MAIL_ADDRESS_NOREPLY');
 
 $app->boot();
